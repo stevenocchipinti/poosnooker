@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import Button from 'material-ui/Button'
 
 class App extends Component {
   render() {
@@ -9,6 +10,9 @@ class App extends Component {
         </header>
         <p>
           To get started, edit <code>src/App.js</code> and save to reload.
+          <Button raised color="primary">
+            Hello World
+          </Button>
         </p>
       </div>
     )
