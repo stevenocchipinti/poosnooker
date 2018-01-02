@@ -4,49 +4,16 @@ import Paper from 'material-ui/Paper'
 import {Link} from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
+import Hero from './Hero'
 import rulesMarkdown from './rules'
 import heroImage from './hero.jpg' // ref: https://pxhere.com/en/photo/813038
 import setupImage from './setup.png'
-import 'typeface-cinzel-decorative'
+import 'typeface-gruppo'
 
 const MAX_WIDTH = '1000px'
 
-const Hero = styled.header`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 600px;
-  padding: 30px 0 45px 0;
-
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 50%,
-    rgba(0, 0, 0, 0.65) 100%
-  ), url('${heroImage}') no-repeat center center;
-  background-size: cover;
-  color: white;
-
-  position: relative;
-  &:before {
-    content: '\\27E9';
-    font-family: 'sans-serif';
-    font-size: 30px;
-    position: absolute;
-    bottom: 15px;
-    transform: rotate(90deg) translateY(0px);
-    @keyframes float {
-      from { transform: rotate(90deg) translateX(0px) }
-      to { transform: rotate(90deg) translateX(-4px) }
-    }
-    animation: 1s ease 0s infinite alternate both running float;
-  }
-`
-
-const Heading = styled.h1`
-  font-family: 'Cinzel Decorative', cursive, serif;
-  text-align: center;
+const Markdown = styled(ReactMarkdown)`
+  font-family: serif;
 `
 
 const ButtonPanel = styled.p`
@@ -74,8 +41,8 @@ const ResponsiveImg = styled.img`
 
 export default () => (
   <Fragment>
-    <Hero>
-      <Heading>Poo Snooker</Heading>
+    <Hero src={heroImage}>
+      <h1>Poo Snooker</h1>
       <ButtonPanel>
         <Button component={Link} to="/game" raised color="primary">
           Start new game
@@ -85,10 +52,10 @@ export default () => (
         </Button>
       </ButtonPanel>
     </Hero>
-    <Heading>How To Play</Heading>
+    <h1>How To Play</h1>
     <Panel>
       <ResponsiveImg src={setupImage} alt="Table setup" />
-      <ReactMarkdown source={rulesMarkdown} />
+      <Markdown source={rulesMarkdown} />
     </Panel>
   </Fragment>
 )
