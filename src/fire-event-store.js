@@ -35,10 +35,10 @@ export class FireEventStore extends Component {
 
   render() {
     const {projection, loaded} = this.state
-    const {stream} = this.props
+    const {stream, children: render} = this.props
     return (
       <Broadcast channel={stream} value={this.eventEmitter()}>
-        {this.props.children(projection, loaded)}
+        {render(projection, loaded)}
       </Broadcast>
     )
   }
@@ -46,7 +46,7 @@ export class FireEventStore extends Component {
 
 export class EventEmitter extends Component {
   render() {
-    const {stream, children} = this.props
-    return <Subscriber channel={stream}>{emit => children(emit)}</Subscriber>
+    const {stream, children: render} = this.props
+    return <Subscriber channel={stream}>{emit => render(emit)}</Subscriber>
   }
 }
