@@ -8,21 +8,21 @@ const PlayerInfoGrid = styled.div`
   padding: 10px;
   align-items: center;
   grid-row-gap: 10px;
+  grid-template-areas:
+    'name     score'
+    'history  history';
 `
 const PlayerNameCell = styled.div`
-  grid-column: 1;
-  grid-row: 1;
+  grid-area: name;
   font-weight: bold;
   font-size: 1.6em;
 `
 const PlayerScoreCell = styled.div`
-  grid-column: 2;
-  grid-row: 1;
+  grid-area: score;
   justify-self: end;
 `
 const PlayerHistoryCell = styled.div`
-  grid-column: 1/3;
-  grid-row: 2;
+  grid-area: history;
   overflow: hidden;
   display: ${props => (props.visible ? 'initial' : 'none')};
 `
