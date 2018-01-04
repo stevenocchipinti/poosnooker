@@ -14,13 +14,17 @@ export class FireEventStore extends Component {
       .collection(props.firebaseKey)
       .orderBy('timestamp')
       .onSnapshot(snapshot => {
-        this.setState({
-          loaded: true,
-          projection: snapshot.docChanges
-            .filter(c => c.type === 'added')
-            .map(e => e.doc.data())
-            .reduce(this.props.reducer, this.state.projection),
-        })
+        console.time(`Reducing events`)
+        this.setState(
+          {
+            loaded: true,
+            projection: snapshot.docChanges
+              .filter(c => c.type === 'added')
+              .map(e => e.doc.data())
+              .reduce(this.props.reducer, this.state.projection),
+          },
+          () => console.timeEnd('Reducing events'),
+        )
       })
   }
 

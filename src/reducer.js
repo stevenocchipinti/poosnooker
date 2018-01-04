@@ -7,13 +7,30 @@ const scoreValues = {
   BLACK: 7,
 }
 
-const addPlayer = (state, playerName, target) => {
+const addPlayer = (state, playerName, target) => ({
+  ...state,
+  currentPlayerIndex: state.currentPlayerIndex || 0,
+  players: [
+    ...state.players,
+    {name: playerName, target, history: [], score: 0},
+  ],
+})
+
+const nextPlayer = state => {
+  let nextPlayerIndex = state.currentPlayerIndex + 1
+  if (nextPlayerIndex >= state.players.length) nextPlayerIndex = 0
   return {
     ...state,
-    players: [
-      ...state.players,
-      {name: playerName, target, history: [], score: 0},
-    ],
+    currentPlayerIndex: nextPlayerIndex,
+  }
+}
+
+const previousPlayer = state => {
+  let previousPlayerIndex = state.currentPlayerIndex - 1
+  if (previousPlayerIndex < 0) previousPlayerIndex = state.players.length - 1
+  return {
+    ...state,
+    currentPlayerIndex: previousPlayerIndex,
   }
 }
 
@@ -23,11 +40,6 @@ const deletePlayer = (state, playerName) => {
     ...state,
     players: [...state.players.slice(0, i), ...state.players.slice(i + 1)],
   }
-}
-
-const shufflePlayers = state => {
-  // TODO
-  return state
 }
 
 const addScoreToPlayer = (state, playerName, reason) => {
@@ -78,18 +90,16 @@ const declareWinner = (state, winner) => {
   }
 }
 
-const endGame = state => {
-  return {
-    ...state,
-    players: state.players.map(p => {
-      return {
-        ...p,
-        score: 0,
-        history: [...p.history, 'GAME_OVER'],
-      }
-    }),
-  }
-}
+const endGame = state => ({
+  ...state,
+  players: state.players.map(p => {
+    return {
+      ...p,
+      score: 0,
+      history: [...p.history, 'GAME_OVER'],
+    }
+  }),
+})
 
 const initialState = {
   players: [],
@@ -102,16 +112,26 @@ export default (state = initialState, action) => {
       return addPlayer(state, action.player, action.target)
     case 'DELETE_PLAYER':
       return deletePlayer(state, action.player)
-    case 'SHUFFLE_PLAYERS':
-      return shufflePlayers(state)
+
+    case 'NEXT_PLAYER':
+      return nextPlayer(state)
+    case 'PREVIOUS_PLAYER':
+      return previousPlayer(state)
+
+    // TODO: This should probably be a deterministic REORDER action
+    // case 'SHUFFLE_PLAYERS':
+    //   return shufflePlayers(state)
+
     case 'SCORE':
       return addScoreToPlayer(state, action.player, action.reason)
     case 'RESET_SCORE':
       return resetPlayerScore(state, action.player, action.reason)
+
     case 'DECLARE_WINNER':
       return endGame(declareWinner(state, action.player))
     case 'END_GAME':
       return endGame(state)
+
     default:
       return state
   }
