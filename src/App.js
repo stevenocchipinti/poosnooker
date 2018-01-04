@@ -1,9 +1,12 @@
 import React, {Fragment} from 'react'
+import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
 import {FireEventStore} from './fire-event-store'
 import reducer from './reducer'
 import ScorePanel from './ScorePanel'
-import PlayerPanel from './PlayerPanel'
+import CurrentPlayerPanel from './CurrentPlayerPanel'
+
+const Layout = styled.div``
 
 export default () => (
   <FireEventStore
@@ -16,8 +19,13 @@ export default () => (
       return (
         <Fragment>
           {loaded || <LinearProgress />}
-          <PlayerPanel currentPlayer={currentPlayer} players={state.players} />
-          <ScorePanel currentPlayer={currentPlayer} />
+          <Layout>
+            <CurrentPlayerPanel
+              currentPlayer={currentPlayer}
+              players={state.players}
+            />
+            <ScorePanel currentPlayer={currentPlayer} />
+          </Layout>
         </Fragment>
       )
     }}
