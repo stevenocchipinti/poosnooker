@@ -7,6 +7,7 @@ const PlayerInfoGrid = styled.div`
   display: grid;
   padding: 10px;
   align-items: center;
+  grid-row-gap: 10px;
 `
 const PlayerNameCell = styled.div`
   grid-column: 1;
@@ -23,6 +24,7 @@ const PlayerHistoryCell = styled.div`
   grid-column: 1/3;
   grid-row: 2;
   overflow: hidden;
+  display: ${props => (props.visible ? 'initial' : 'none')};
 `
 
 export default ({player}) => {
@@ -35,7 +37,7 @@ export default ({player}) => {
           <strong>{player.score}</strong> / {player.target}
         </PlayerScoreCell>
 
-        <PlayerHistoryCell>
+        <PlayerHistoryCell visible={!!player.history.length}>
           <PlayerHistory history={player.history} />
         </PlayerHistoryCell>
       </PlayerInfoGrid>

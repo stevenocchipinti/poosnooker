@@ -17,9 +17,9 @@ const Wrapper = styled.div`
   justify-content: flex-end;
 `
 const Ball = styled.div`
-  min-width: 10px;
-  width: 10px;
-  height: 10px;
+  min-width: 8px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   margin: 3px;
   background: ${props => colors[props.event]};
