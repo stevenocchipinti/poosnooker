@@ -3,8 +3,15 @@ import styled from 'styled-components'
 import {EventEmitter} from '../fire-event-store'
 import Button from 'material-ui/Button'
 
-const StyledButton = styled(Button)`
-  margin: 10px;
+const Section = styled.section`
+  grid-area: controls;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  @media (min-width: 700px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export default ({currentPlayer}) => {
@@ -12,15 +19,16 @@ export default ({currentPlayer}) => {
     return (
       <EventEmitter stream="game-events">
         {emit => (
-          <StyledButton
+          <Button
             onClick={() =>
               emit({type: 'SCORE', player: currentPlayer.name, reason: value})
             }
             color="primary"
+            dense
             raised
           >
             {children}
-          </StyledButton>
+          </Button>
         )}
       </EventEmitter>
     )
@@ -30,7 +38,7 @@ export default ({currentPlayer}) => {
     return (
       <EventEmitter stream="game-events">
         {emit => (
-          <StyledButton
+          <Button
             onClick={() =>
               emit({
                 type: 'RESET_SCORE',
@@ -39,17 +47,18 @@ export default ({currentPlayer}) => {
               })
             }
             color="accent"
+            dense
             raised
           >
             {children}
-          </StyledButton>
+          </Button>
         )}
       </EventEmitter>
     )
   }
 
   return (
-    <section>
+    <Section>
       <ScoreButton value="CANNON">Cannon</ScoreButton>
       <ScoreButton value="YELLOW">2</ScoreButton>
       <ScoreButton value="GREEN">3</ScoreButton>
@@ -58,6 +67,6 @@ export default ({currentPlayer}) => {
       <ScoreButton value="BLACK">7</ScoreButton>
       <ResetButton value="FOUL">Foul</ResetButton>
       <ResetButton value="POO">Poo</ResetButton>
-    </section>
+    </Section>
   )
 }

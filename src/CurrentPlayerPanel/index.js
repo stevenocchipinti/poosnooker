@@ -17,15 +17,20 @@ const EventEmitterButton = ({event, children}) => {
   )
 }
 
-const CurrentPlayerPanel = styled.div`
+const Section = styled.section`
+  grid-area: current-player;
+  justify-self: center;
+
   display: flex;
   justify-content: center;
+  align-items: center;
+  max-width: 600px;
 `
 
 export default ({currentPlayer, players}) => {
-  if (!currentPlayer || !players.length) return <section />
+  if (!currentPlayer || !players.length) return <Section />
   return (
-    <CurrentPlayerPanel>
+    <Section>
       <EventEmitterButton event={{type: 'PREVIOUS_PLAYER'}}>
         &#x27E8;
       </EventEmitterButton>
@@ -37,6 +42,6 @@ export default ({currentPlayer, players}) => {
       <EventEmitterButton event={{type: 'NEXT_PLAYER'}}>
         &#x27E9;
       </EventEmitterButton>
-    </CurrentPlayerPanel>
+    </Section>
   )
 }
