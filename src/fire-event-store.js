@@ -12,6 +12,7 @@ export class FireEventStore extends Component {
     }
     Firebase.firestore()
       .collection(props.firebaseKey)
+      .orderBy('timestamp')
       .onSnapshot(snapshot => {
         this.setState({
           loaded: true,
