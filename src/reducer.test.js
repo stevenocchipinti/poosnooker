@@ -11,6 +11,49 @@ it('adds a player', () => {
   })
 })
 
+it('calculates the score', () => {
+  const actions = [
+    {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+    {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+    {type: 'SCORE', player: 'Steve', reason: 'CANNON'},
+    {type: 'SCORE', player: 'Craig', reason: 'CANNON'},
+    {type: 'SCORE', player: 'Steve', reason: 'YELLOW'},
+    {type: 'SCORE', player: 'Steve', reason: 'GREEN'},
+    {type: 'RESET_SCORE', player: 'Steve', reason: 'FOUL'},
+    {type: 'SCORE', player: 'Steve', reason: 'CANNON'},
+    {type: 'SCORE', player: 'Steve', reason: 'BLUE'},
+    {type: 'SCORE', player: 'Steve', reason: 'PINK'},
+    {type: 'SCORE', player: 'Steve', reason: 'BLACK'},
+    {type: 'RESET_SCORE', player: 'Craig', reason: 'FOUL'},
+  ]
+
+  expect(actions.reduce(reduce, undefined)).toEqual({
+    players: [
+      {
+        name: 'Steve',
+        target: 31,
+        history: [
+          'CANNON', // 2
+          'YELLOW', // 2
+          'GREEN', // 3
+          'FOUL', // 0
+          'CANNON', // 2
+          'BLUE', // 7
+          'PINK', // 13
+          'BLACK', // 20
+        ],
+        score: 20,
+      },
+      {
+        name: 'Craig',
+        target: 31,
+        history: ['CANNON', 'FOUL'],
+        score: 0,
+      },
+    ],
+  })
+})
+
 it('does a bunch of stuff', () => {
   const actions = [
     {type: 'ADD_PLAYER', player: 'Steve', target: 31},
