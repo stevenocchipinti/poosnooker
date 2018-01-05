@@ -15,6 +15,7 @@ const colors = {
 const Wrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  height: 14px;
 `
 const Ball = styled.div`
   min-width: 8px;

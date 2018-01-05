@@ -37,7 +37,7 @@ export default ({player}) => {
           <strong>{player.score}</strong> / {player.target}
         </PlayerScoreCell>
 
-        <PlayerHistoryCell visible={!!player.history.length}>
+        <PlayerHistoryCell>
           <PlayerHistory history={player.history} />
         </PlayerHistoryCell>
       </PlayerInfoGrid>
