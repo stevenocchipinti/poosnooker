@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
 import {FireEventStore} from './fire-event-store'
@@ -12,7 +12,6 @@ const Layout = styled.div`
   width: 100vw;
   height: 100vh;
 
-  grid-template-columns: 1fr;
   grid-template-areas:
     'current-player'
     'controls';
@@ -24,6 +23,17 @@ const Layout = styled.div`
       'other-players controls';
   }
 `
+
+const ProgressBar = styled.div`
+  position: absolute;
+  width: 100vw;
+  display: ${props => (props.visible ? 'none' : 'block')};
+`
+const LoadingIndicator = ({visible}) => (
+  <ProgressBar visible={visible}>
+    <LinearProgress />
+  </ProgressBar>
+)
 
 export default () => (
   <FireEventStore
@@ -37,17 +47,15 @@ export default () => (
         p => p.name !== currentPlayer.name,
       )
       return (
-        <Fragment>
-          {loaded || <LinearProgress />}
-          <Layout>
-            <CurrentPlayerPanel
-              currentPlayer={currentPlayer}
-              players={state.players}
-            />
-            <OtherPlayersPanel players={otherPlayers} />
-            <ScorePanel currentPlayer={currentPlayer} />
-          </Layout>
-        </Fragment>
+        <Layout>
+          <LoadingIndicator visible={loaded} />
+          <CurrentPlayerPanel
+            currentPlayer={currentPlayer}
+            players={state.players}
+          />
+          <OtherPlayersPanel players={otherPlayers} />
+          <ScorePanel currentPlayer={currentPlayer} />
+        </Layout>
       )
     }}
   </FireEventStore>

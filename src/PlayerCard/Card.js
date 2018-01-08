@@ -12,8 +12,8 @@ const ProgressBar = styled(LinearProgress)`
   bottom: 0;
 `
 
-export default ({progress, children}) => (
-  <StyledPaper>
+export default ({progress, children, className}) => (
+  <StyledPaper className={className}>
     {children}
     <ProgressBar mode="determinate" value={progress * 100} />
   </StyledPaper>

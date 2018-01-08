@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import {EventEmitter} from '../fire-event-store'
-import PlayerCard from '../PlayerCard'
+import {PlayerCard} from '../PlayerCard'
 
 const EventEmitterButton = ({event, children}) => {
   return (
