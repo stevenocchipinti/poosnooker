@@ -2,13 +2,44 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import reduce from './reducer'
 
-it('adds a player', () => {
-  const action = {type: 'ADD_PLAYER', player: 'Steve', target: 31}
-  const newState = reduce(undefined, action)
+describe('adding a player', () => {
+  it('adds a player if a valid player name and target is provided', () => {
+    const action = {type: 'ADD_PLAYER', player: 'Steve', target: 31}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([
+      {name: 'Steve', target: 31, history: [], score: 0},
+    ])
+  })
 
-  expect(newState.players).toEqual([
-    {name: 'Steve', target: 31, history: [], score: 0},
-  ])
+  it("doesn't add a player if a name isn't provided", () => {
+    const action = {type: 'ADD_PLAYER', target: 31}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([])
+  })
+
+  it("doesn't add a player if a name is blank", () => {
+    const action = {type: 'ADD_PLAYER', player: '', target: 31}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([])
+  })
+
+  it("doesn't add a player if a target isn't provided", () => {
+    const action = {type: 'ADD_PLAYER', player: ''}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([])
+  })
+
+  it("doesn't add a player if a target is below 31", () => {
+    const action = {type: 'ADD_PLAYER', player: '', target: 30}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([])
+  })
+
+  it("doesn't add a player if a target is not an increment of 10 + 1", () => {
+    const action = {type: 'ADD_PLAYER', player: '', target: 40}
+    const newState = reduce(undefined, action)
+    expect(newState.players).toEqual([])
+  })
 })
 
 it('calculates the score for players', () => {

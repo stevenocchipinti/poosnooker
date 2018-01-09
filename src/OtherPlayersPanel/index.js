@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import {SmallPlayerCard} from '../PlayerCard'
+import AddPlayerButton from '../AddPlayerButton'
 
 const Section = styled.section`
   grid-area: other-players;
   justify-self: center;
   align-items: center;
+  align-content: center;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: scroll;
@@ -19,12 +21,12 @@ const Section = styled.section`
 `
 
 export default ({players}) => {
-  if (!players.length) return <Section />
   return (
     <Section>
       {players.map(player => (
         <SmallPlayerCard key={player.name} player={player} />
       ))}
+      <AddPlayerButton />
     </Section>
   )
 }

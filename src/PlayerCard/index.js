@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Card from './Card'
+import {Card, SmallCard} from './Card'
 import PlayerHistory from './PlayerHistory'
 
 const PlayerInfoGrid = styled.div`
@@ -15,6 +15,7 @@ const PlayerInfoGrid = styled.div`
     'score'
     'history';
 `
+
 const PlayerNameCell = styled.div`
   grid-area: name;
   font-weight: bold;
@@ -31,9 +32,6 @@ const PlayerHistoryCell = styled.div`
   overflow: hidden;
 `
 
-const SmallCard = styled(Card)`
-  width: 220px;
-`
 const SmallPlayerInfoGrid = PlayerInfoGrid.extend`
   padding: 20px;
   font-size: 1em;

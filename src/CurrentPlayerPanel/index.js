@@ -9,6 +9,10 @@ const EventEmitterButton = ({event, children}) => {
     <EventEmitter stream="game-events">
       {emit => (
         // Using inline-style here because styled components won't override MUI
+        /* TODO: Find a better alternative to inline styles and the override in
+        * AddPlayerButton. See here for more info:
+        * https://material-ui-next.com/customization/css-in-js/#css-injection-order
+        */
         <Button style={{fontSize: '2em'}} dense onClick={() => emit(event)}>
           {children}
         </Button>
@@ -24,7 +28,6 @@ const Section = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 600px;
 `
 
 export default ({currentPlayer, players}) => {

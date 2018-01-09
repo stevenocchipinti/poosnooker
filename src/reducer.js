@@ -7,14 +7,20 @@ const scoreValues = {
   BLACK: 7,
 }
 
-const addPlayer = (state, playerName, target) => ({
-  ...state,
-  currentPlayerIndex: state.currentPlayerIndex || 0,
-  players: [
-    ...state.players,
-    {name: playerName, target, history: [], score: 0},
-  ],
-})
+const addPlayer = (state, playerName, target) => {
+  const hasValidName = playerName && playerName.trim().length
+  const hasValidTarget = target >= 31 && (target - 1) % 10 === 0
+  if (!hasValidName || !hasValidTarget) return state
+
+  return {
+    ...state,
+    currentPlayerIndex: state.currentPlayerIndex || 0,
+    players: [
+      ...state.players,
+      {name: playerName, target, history: [], score: 0},
+    ],
+  }
+}
 
 const nextPlayer = state => {
   let nextPlayerIndex = state.currentPlayerIndex + 1

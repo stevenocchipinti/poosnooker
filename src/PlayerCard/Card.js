@@ -7,14 +7,20 @@ const StyledPaper = styled(Paper)`
   margin: 10px;
   position: relative;
 `
-const ProgressBar = styled(LinearProgress)`
-  position: absolute;
-  bottom: 0;
-`
 
-export default ({progress, children, className}) => (
+const ProgressBar = ({progress}) => (
+  <div style={{position: 'absolute', bottom: 0, width: '100%'}}>
+    <LinearProgress mode="determinate" value={progress * 100} />
+  </div>
+)
+
+export const Card = ({progress, children, className}) => (
   <StyledPaper className={className}>
     {children}
-    <ProgressBar mode="determinate" value={progress * 100} />
+    <ProgressBar progress={progress} />
   </StyledPaper>
 )
+
+export const SmallCard = styled(Card)`
+  width: 220px;
+`
