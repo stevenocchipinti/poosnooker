@@ -92,27 +92,31 @@ const resetPlayerScore = (state, playerName, reason) => {
 
 const declareWinner = (state, winner) => {
   const playerIndex = state.players.findIndex(p => p.name === winner)
-  return {
+  const player = state.players[playerIndex]
+  if (player.score !== player.target) return state
+
+  const newState = {
     ...state,
     players: [
       ...state.players.slice(0, playerIndex),
       {
-        ...state.players[playerIndex],
-        target: state.players[playerIndex].target + 10,
-        history: [...state.players[playerIndex].history, 'WIN'],
+        ...player,
+        target: player.target + 10,
+        history: [...player.history, 'WIN'],
       },
       ...state.players.slice(playerIndex + 1),
     ],
   }
+  return endGame(newState)
 }
 
 const endGame = state => ({
   ...state,
-  players: state.players.map(p => {
+  players: state.players.map(player => {
     return {
-      ...p,
+      ...player,
       score: 0,
-      history: [...p.history, 'GAME_OVER'],
+      history: [...player.history, 'GAME_OVER'],
     }
   }),
 })
@@ -144,7 +148,7 @@ export default (state = initialState, action) => {
       return resetPlayerScore(state, action.player, action.reason)
 
     case 'DECLARE_WINNER':
-      return endGame(declareWinner(state, action.player))
+      return declareWinner(state, action.player)
     case 'END_GAME':
       return endGame(state)
 

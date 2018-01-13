@@ -121,6 +121,98 @@ describe('adding score to a player', () => {
   })
 })
 
+describe('winning', () => {
+  it('allows a win if the score is equal to the target', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
+      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 31
+      {type: 'DECLARE_WINNER', player: 'Steve'}, // 0
+    ]
+    const newState = actions.reduce(reduce, undefined)
+    expect(newState.players).toEqual([
+      {
+        name: 'Steve',
+        target: 41,
+        history: [
+          'CANNON',
+          'BLACK',
+          'BLACK',
+          'BLACK',
+          'PINK',
+          'CANNON',
+          'WIN',
+          'GAME_OVER',
+        ],
+        score: 0,
+      },
+      {
+        name: 'Craig',
+        target: 31,
+        history: ['GAME_OVER'],
+        score: 0,
+      },
+    ])
+  })
+
+  it('does not automatically win when reaching a target score', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
+      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 31
+    ]
+    const newState = actions.reduce(reduce, undefined)
+    expect(newState.players).toEqual([
+      {
+        name: 'Steve',
+        target: 31,
+        history: ['CANNON', 'BLACK', 'BLACK', 'BLACK', 'PINK', 'CANNON'],
+        score: 31,
+      },
+      {
+        name: 'Craig',
+        target: 31,
+        history: [],
+        score: 0,
+      },
+    ])
+  })
+
+  it('does not allow a win if score is not equal to the target', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'DECLARE_WINNER', player: 'Steve'}, // 2
+    ]
+    const newState = actions.reduce(reduce, undefined)
+    expect(newState.players).toEqual([
+      {
+        name: 'Steve',
+        target: 31,
+        history: ['CANNON'],
+        score: 2,
+      },
+      {
+        name: 'Craig',
+        target: 31,
+        history: [],
+        score: 0,
+      },
+    ])
+  })
+})
+
 // Being lazy, should probably write single purpose unit tests :/
 describe('a typical scenario (aka lazy integration test)', () => {
   it('does a bunch of stuff', () => {
@@ -137,12 +229,15 @@ describe('a typical scenario (aka lazy integration test)', () => {
       {type: 'SCORE', player: 'Sandy', reason: 'CANNON'}, // 2
       {type: 'NEXT_PLAYER'}, // currentPlayerIndex: 0
       {type: 'SCORE', player: 'Steve', reason: 'YELLOW'}, // 4
-      {type: 'SCORE', player: 'Steve', reason: 'GREEN'}, // 7
-      {type: 'SCORE', player: 'Steve', reason: 'BLUE'}, // 12
       {type: 'RESET_SCORE', player: 'Steve', reason: 'FOUL'}, // 0
       {type: 'RESET_SCORE', player: 'Steve', reason: 'POO'}, // 0
-      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 6
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 13
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 4
+      {type: 'SCORE', player: 'Steve', reason: 'GREEN'}, // 7
+      {type: 'SCORE', player: 'Steve', reason: 'BLUE'}, // 12
+      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 18
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 25
+      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 31
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 2
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 1
       {type: 'DECLARE_WINNER', player: 'Steve'},
@@ -155,14 +250,17 @@ describe('a typical scenario (aka lazy integration test)', () => {
           name: 'Steve',
           target: 41,
           history: [
-            'CANNON',
-            'YELLOW',
-            'GREEN',
-            'BLUE',
-            'FOUL',
-            'POO',
-            'PINK',
-            'BLACK',
+            'CANNON', // 2
+            'YELLOW', // 4
+            'FOUL', // 0
+            'POO', // 0
+            'CANNON', // 2
+            'CANNON', // 4
+            'GREEN', // 7
+            'BLUE', // 12
+            'PINK', // 18
+            'BLACK', // 25
+            'PINK', // 25
             'WIN',
             'GAME_OVER',
           ],
