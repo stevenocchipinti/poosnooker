@@ -22,6 +22,17 @@ const addPlayer = (state, playerName, target) => {
   }
 }
 
+const deletePlayer = (state, playerName) => {
+  const playerIndex = state.players.findIndex(p => p.name === playerName)
+  return {
+    ...state,
+    players: [
+      ...state.players.slice(0, playerIndex),
+      ...state.players.slice(playerIndex + 1),
+    ],
+  }
+}
+
 const nextPlayer = state => {
   let nextPlayerIndex = state.currentPlayerIndex + 1
   if (nextPlayerIndex >= state.players.length) nextPlayerIndex = 0
@@ -40,58 +51,57 @@ const previousPlayer = state => {
   }
 }
 
-const deletePlayer = (state, playerName) => {
-  const i = state.players.findIndex(player => player.name === playerName)
-  return {
-    ...state,
-    players: [...state.players.slice(0, i), ...state.players.slice(i + 1)],
-  }
-}
-
 const addScoreToPlayer = (state, playerName, reason) => {
-  const i = state.players.findIndex(player => player.name === playerName)
-  return {
+  const playerIndex = state.players.findIndex(p => p.name === playerName)
+  const player = state.players[playerIndex]
+  const newScore = player.score + scoreValues[reason]
+  const newState = {
     ...state,
     players: [
-      ...state.players.slice(0, i),
+      ...state.players.slice(0, playerIndex),
       {
-        ...state.players[i],
-        score: state.players[i].score + scoreValues[reason],
-        history: [...state.players[i].history, reason],
+        ...player,
+        score: newScore,
+        history: [...player.history, reason],
       },
-      ...state.players.slice(i + 1),
+      ...state.players.slice(playerIndex + 1),
     ],
   }
+
+  // Winning is not automatic to allow for 'undo'
+  const isOver = newScore === player.target - 1 || newScore > player.target
+  return isOver ? resetPlayerScore(newState, playerName, 'OVER') : newState
 }
 
 const resetPlayerScore = (state, playerName, reason) => {
-  const i = state.players.findIndex(player => player.name === playerName)
+  const playerIndex = state.players.findIndex(p => p.name === playerName)
+  const player = state.players[playerIndex]
   return {
     ...state,
     players: [
-      ...state.players.slice(0, i),
+      ...state.players.slice(0, playerIndex),
       {
-        ...state.players[i],
+        ...player,
         score: 0,
-        history: [...state.players[i].history, reason],
+        history: [...state.players[playerIndex].history, reason],
       },
-      ...state.players.slice(i + 1),
+      ...state.players.slice(playerIndex + 1),
     ],
   }
 }
 
 const declareWinner = (state, winner) => {
-  const i = state.players.findIndex(player => player.name === winner)
+  const playerIndex = state.players.findIndex(p => p.name === winner)
   return {
     ...state,
     players: [
-      ...state.players.slice(0, i),
+      ...state.players.slice(0, playerIndex),
       {
-        ...state.players[i],
-        target: state.players[i].target + 10,
-        history: [...state.players[i].history, 'WIN'],
+        ...state.players[playerIndex],
+        target: state.players[playerIndex].target + 10,
+        history: [...state.players[playerIndex].history, 'WIN'],
       },
-      ...state.players.slice(i + 1),
+      ...state.players.slice(playerIndex + 1),
     ],
   }
 }
