@@ -122,7 +122,7 @@ describe('adding score to a player', () => {
 })
 
 describe('winning', () => {
-  it('allows a win if the score is equal to the target', () => {
+  describe('allows a win if the score is equal to the target', () => {
     const actions = [
       {type: 'ADD_PLAYER', player: 'Steve', target: 31},
       {type: 'ADD_PLAYER', player: 'Craig', target: 31},
@@ -135,29 +135,30 @@ describe('winning', () => {
       {type: 'DECLARE_WINNER', player: 'Steve'}, // 0
     ]
     const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 41,
-        history: [
-          'CANNON',
-          'BLACK',
-          'BLACK',
-          'BLACK',
-          'PINK',
-          'CANNON',
-          'WIN',
-          'GAME_OVER',
-        ],
-        score: 0,
-      },
-      {
-        name: 'Craig',
-        target: 31,
-        history: ['GAME_OVER'],
-        score: 0,
-      },
-    ])
+    const steve = newState.players[0]
+    const craig = newState.players[1]
+
+    it('increments the target score by 10', () => {
+      expect(steve.target).toEqual(41)
+    })
+    it('adds a WIN to the history', () => {
+      expect(steve.history).toEqual([
+        'CANNON',
+        'BLACK',
+        'BLACK',
+        'BLACK',
+        'PINK',
+        'CANNON',
+        'WIN',
+        'GAME_OVER',
+      ])
+    })
+    it('ends the game (adds GAME_OVER to everyone)', () => {
+      expect(craig.history).toEqual(['GAME_OVER'])
+    })
+    it('resets the score', () => {
+      expect(steve.score).toEqual(0)
+    })
   })
 
   it('does not automatically win when reaching a target score', () => {
