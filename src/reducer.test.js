@@ -4,10 +4,14 @@ import reduce from './reducer'
 
 describe('adding a player', () => {
   it('adds a player if a valid player name and target is provided', () => {
-    const action = {type: 'ADD_PLAYER', player: 'Steve', target: 31}
-    const newState = reduce(undefined, action)
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'ADD_PLAYER', player: 'Craig', target: 41},
+    ]
+    const newState = actions.reduce(reduce, undefined)
     expect(newState.players).toEqual([
       {name: 'Steve', target: 31, history: [], score: 0},
+      {name: 'Craig', target: 41, history: [], score: 0},
     ])
   })
 
@@ -30,7 +34,7 @@ describe('adding a player', () => {
   })
 
   it("doesn't add a player if a target is below 31", () => {
-    const action = {type: 'ADD_PLAYER', player: '', target: 30}
+    const action = {type: 'ADD_PLAYER', player: '', target: 21}
     const newState = reduce(undefined, action)
     expect(newState.players).toEqual([])
   })
