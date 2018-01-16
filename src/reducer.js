@@ -54,6 +54,10 @@ const previousPlayer = state => {
 const addScoreToPlayer = (state, playerName, reason) => {
   const playerIndex = state.players.findIndex(p => p.name === playerName)
   const player = state.players[playerIndex]
+
+  // Rule: Cannot score unless you cannon off the pink
+  if (player.score === 0 && reason !== 'CANNON') return state
+
   const newScore = player.score + scoreValues[reason]
   const newState = {
     ...state,

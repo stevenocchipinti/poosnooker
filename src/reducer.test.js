@@ -47,7 +47,32 @@ describe('adding a player', () => {
 })
 
 describe('adding score to a player', () => {
-  it('calculates the score for players', () => {
+  describe('when a player DOES NOT have the required opening CANNON', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'YELLOW'}, // 4
+    ]
+
+    it('does not add any scores', () => {
+      const newState = actions.reduce(reduce, undefined)
+      expect(newState.players[0].score).toEqual(0)
+    })
+
+    it('does not add anything to the history', () => {
+      const newState = actions.reduce(reduce, undefined)
+      expect(newState.players[0].history).toHaveLength(0)
+    })
+
+    it('still does add any score resets to the history', () => {
+      const newState = [
+        ...actions,
+        {type: 'RESET_SCORE', player: 'Steve', reason: 'POO'},
+      ].reduce(reduce, undefined)
+      expect(newState.players[0].history).toEqual(['POO'])
+    })
+  })
+
+  describe('when a player DOES have the required opening CANNON', () => {
     const actions = [
       {type: 'ADD_PLAYER', player: 'Steve', target: 31},
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
@@ -62,66 +87,73 @@ describe('adding score to a player', () => {
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 25
     ]
     const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 31,
-        history: [
-          'CANNON',
-          'POO',
-          'CANNON',
-          'FOUL',
-          'CANNON',
-          'YELLOW',
-          'GREEN',
-          'BLUE',
-          'PINK',
-          'BLACK',
-        ],
-        score: 25,
-      },
-    ])
-  })
+    const player = newState.players[0]
 
-  it('resets the score if it reaches (target - 1) points', () => {
-    const actions = [
-      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
-      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 30
-    ]
-    const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 31,
-        history: ['CANNON', 'BLACK', 'BLACK', 'BLACK', 'BLACK', 'OVER'],
-        score: 0,
-      },
-    ])
-  })
+    it('does add points to the score', () => {
+      expect(player.score).toEqual(25)
+    })
+    it('does add an item to the history', () => {
+      expect(player.history).toEqual([
+        'CANNON',
+        'POO',
+        'CANNON',
+        'FOUL',
+        'CANNON',
+        'YELLOW',
+        'GREEN',
+        'BLUE',
+        'PINK',
+        'BLACK',
+      ])
+    })
 
-  it('resets the score if it goes over the target points', () => {
-    const actions = [
-      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
-      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
-      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
-      {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
-      {type: 'SCORE', player: 'Steve', reason: 'GREEN'}, // 32
-    ]
-    const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 31,
-        history: ['CANNON', 'BLACK', 'BLACK', 'BLACK', 'PINK', 'GREEN', 'OVER'],
-        score: 0,
-      },
-    ])
+    it('resets the score if it reaches (target - 1) points', () => {
+      const actions = [
+        {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+        {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 30
+      ]
+      const newState = actions.reduce(reduce, undefined)
+      const player = newState.players[0]
+
+      expect(player.score).toEqual(0)
+      expect(player.history).toEqual([
+        'CANNON',
+        'BLACK',
+        'BLACK',
+        'BLACK',
+        'BLACK',
+        'OVER',
+      ])
+    })
+
+    it('resets the score if it goes over the target points', () => {
+      const actions = [
+        {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+        {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
+        {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
+        {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
+        {type: 'SCORE', player: 'Steve', reason: 'GREEN'}, // 32
+      ]
+      const newState = actions.reduce(reduce, undefined)
+      const player = newState.players[0]
+
+      expect(player.score).toEqual(0)
+      expect(player.history).toEqual([
+        'CANNON',
+        'BLACK',
+        'BLACK',
+        'BLACK',
+        'PINK',
+        'GREEN',
+        'OVER',
+      ])
+    })
   })
 })
 
@@ -168,7 +200,6 @@ describe('winning', () => {
   it('does not automatically win when reaching a target score', () => {
     const actions = [
       {type: 'ADD_PLAYER', player: 'Steve', target: 31},
-      {type: 'ADD_PLAYER', player: 'Craig', target: 31},
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
@@ -177,44 +208,29 @@ describe('winning', () => {
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 31
     ]
     const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 31,
-        history: ['CANNON', 'BLACK', 'BLACK', 'BLACK', 'PINK', 'CANNON'],
-        score: 31,
-      },
-      {
-        name: 'Craig',
-        target: 31,
-        history: [],
-        score: 0,
-      },
-    ])
+    const player = newState.players[0]
+
+    expect(player.score).toEqual(31)
+    expect(player.target).toEqual(31)
+    expect(player.history).toHaveLength(6)
+    expect(player.history).not.toContain('WIN')
+    expect(player.history).not.toContain('GAME_OVER')
   })
 
   it('does not allow a win if score is not equal to the target', () => {
     const actions = [
       {type: 'ADD_PLAYER', player: 'Steve', target: 31},
-      {type: 'ADD_PLAYER', player: 'Craig', target: 31},
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
       {type: 'DECLARE_WINNER', player: 'Steve'}, // 2
     ]
     const newState = actions.reduce(reduce, undefined)
-    expect(newState.players).toEqual([
-      {
-        name: 'Steve',
-        target: 31,
-        history: ['CANNON'],
-        score: 2,
-      },
-      {
-        name: 'Craig',
-        target: 31,
-        history: [],
-        score: 0,
-      },
-    ])
+    const player = newState.players[0]
+
+    expect(player.score).toEqual(2)
+    expect(player.target).toEqual(31)
+    expect(player.history).toHaveLength(1)
+    expect(player.history).not.toContain('WIN')
+    expect(player.history).not.toContain('GAME_OVER')
   })
 })
 
