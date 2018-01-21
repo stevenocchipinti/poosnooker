@@ -92,6 +92,7 @@ describe('adding score to a player', () => {
     it('does add points to the score', () => {
       expect(player.score).toEqual(25)
     })
+
     it('does add an item to the history', () => {
       expect(player.history).toEqual([
         'CANNON',
@@ -107,7 +108,7 @@ describe('adding score to a player', () => {
       ])
     })
 
-    it('resets the score if it reaches (target - 1) points', () => {
+    describe('when the score reaches (target - 1) points', () => {
       const actions = [
         {type: 'ADD_PLAYER', player: 'Steve', target: 31},
         {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
@@ -119,18 +120,23 @@ describe('adding score to a player', () => {
       const newState = actions.reduce(reduce, undefined)
       const player = newState.players[0]
 
-      expect(player.score).toEqual(0)
-      expect(player.history).toEqual([
-        'CANNON',
-        'BLACK',
-        'BLACK',
-        'BLACK',
-        'BLACK',
-        'OVER',
-      ])
+      it('resets the score', () => {
+        expect(player.score).toEqual(0)
+      })
+
+      it('adds "OVER" to the history', () => {
+        expect(player.history).toEqual([
+          'CANNON',
+          'BLACK',
+          'BLACK',
+          'BLACK',
+          'BLACK',
+          'OVER',
+        ])
+      })
     })
 
-    it('resets the score if it goes over the target points', () => {
+    describe('when the score goes over the target points', () => {
       const actions = [
         {type: 'ADD_PLAYER', player: 'Steve', target: 31},
         {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
@@ -143,16 +149,21 @@ describe('adding score to a player', () => {
       const newState = actions.reduce(reduce, undefined)
       const player = newState.players[0]
 
-      expect(player.score).toEqual(0)
-      expect(player.history).toEqual([
-        'CANNON',
-        'BLACK',
-        'BLACK',
-        'BLACK',
-        'PINK',
-        'GREEN',
-        'OVER',
-      ])
+      it('resets the score', () => {
+        expect(player.score).toEqual(0)
+      })
+
+      it('adds "OVER" to the history', () => {
+        expect(player.history).toEqual([
+          'CANNON',
+          'BLACK',
+          'BLACK',
+          'BLACK',
+          'PINK',
+          'GREEN',
+          'OVER',
+        ])
+      })
     })
   })
 })
