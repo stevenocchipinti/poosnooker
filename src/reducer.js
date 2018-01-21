@@ -1,3 +1,4 @@
+const resetValues = ['FOUL', 'POO', 'OVER', 'GAME_OVER']
 const scoreValues = {
   CANNON: 2,
   YELLOW: 2,
@@ -6,6 +7,13 @@ const scoreValues = {
   PINK: 6,
   BLACK: 7,
 }
+
+const calculateScore = history =>
+  history.reduce((score, value) => {
+    if (resetValues.includes(value)) return 0
+    if (scoreValues[value]) return score + scoreValues[value]
+    return score
+  }, 0)
 
 const addPlayer = (state, playerName, target) => {
   const hasValidName = playerName && playerName.trim().length
@@ -58,7 +66,8 @@ const addScoreToPlayer = (state, playerName, reason) => {
   // Rule: Cannot score unless you cannon off the pink
   if (player.score === 0 && reason !== 'CANNON') return state
 
-  const newScore = player.score + scoreValues[reason]
+  const newHistory = [...player.history, reason]
+  const newScore = calculateScore(newHistory)
   const newState = {
     ...state,
     players: [
@@ -66,7 +75,7 @@ const addScoreToPlayer = (state, playerName, reason) => {
       {
         ...player,
         score: newScore,
-        history: [...player.history, reason],
+        history: newHistory,
       },
       ...state.players.slice(playerIndex + 1),
     ],
@@ -80,14 +89,36 @@ const addScoreToPlayer = (state, playerName, reason) => {
 const resetPlayerScore = (state, playerName, reason) => {
   const playerIndex = state.players.findIndex(p => p.name === playerName)
   const player = state.players[playerIndex]
+  const newHistory = [...player.history, reason]
+  const newScore = calculateScore(newHistory)
   return {
     ...state,
     players: [
       ...state.players.slice(0, playerIndex),
       {
         ...player,
-        score: 0,
-        history: [...state.players[playerIndex].history, reason],
+        score: newScore,
+        history: newHistory,
+      },
+      ...state.players.slice(playerIndex + 1),
+    ],
+  }
+}
+
+const undoPlayerScore = (state, playerName) => {
+  const playerIndex = state.players.findIndex(p => p.name === playerName)
+  const player = state.players[playerIndex]
+  const history = state.players[playerIndex].history
+  const newHistory = history.slice(0, history.length - 1)
+  const newScore = calculateScore(newHistory)
+  return {
+    ...state,
+    players: [
+      ...state.players.slice(0, playerIndex),
+      {
+        ...player,
+        score: newScore,
+        history: newHistory,
       },
       ...state.players.slice(playerIndex + 1),
     ],
@@ -117,10 +148,12 @@ const declareWinner = (state, winner) => {
 const endGame = state => ({
   ...state,
   players: state.players.map(player => {
+    const newHistory = [...player.history, 'GAME_OVER']
+    const newScore = calculateScore(newHistory)
     return {
       ...player,
-      score: 0,
-      history: [...player.history, 'GAME_OVER'],
+      score: newScore,
+      history: newHistory,
     }
   }),
 })
@@ -150,6 +183,8 @@ export default (state = initialState, action) => {
       return addScoreToPlayer(state, action.player, action.reason)
     case 'RESET_SCORE':
       return resetPlayerScore(state, action.player, action.reason)
+    case 'UNDO':
+      return undoPlayerScore(state, action.player)
 
     case 'DECLARE_WINNER':
       return declareWinner(state, action.player)

@@ -245,6 +245,48 @@ describe('winning', () => {
   })
 })
 
+describe('undo', () => {
+  describe('when the last history item was a "SCORE" event', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'SCORE', player: 'Steve', reason: 'BLUE'}, // 7
+      {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 14
+      {type: 'UNDO', player: 'Steve'}, // 7
+    ]
+    const newState = actions.reduce(reduce, undefined)
+    const player = newState.players[0]
+
+    it('removes the last "SCORE" event', () => {
+      expect(player.history).toEqual(['CANNON', 'BLUE'])
+    })
+
+    it('excludes the last "SCORE" event from the score calculation', () => {
+      expect(player.score).toEqual(7)
+    })
+  })
+
+  describe('when the last history item was a "RESET" event', () => {
+    const actions = [
+      {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+      {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
+      {type: 'SCORE', player: 'Steve', reason: 'BLUE'}, // 7
+      {type: 'SCORE', player: 'Steve', reason: 'POO'}, // 0
+      {type: 'UNDO', player: 'Steve'}, // 7
+    ]
+    const newState = actions.reduce(reduce, undefined)
+    const player = newState.players[0]
+
+    it('removes the last "RESET" event', () => {
+      expect(player.history).toEqual(['CANNON', 'BLUE'])
+    })
+
+    it('excludes the last "RESET" event from the score calculation', () => {
+      expect(player.score).toEqual(7)
+    })
+  })
+})
+
 // Being lazy, should probably write single purpose unit tests :/
 describe('a typical scenario (aka lazy integration test)', () => {
   it('does a bunch of stuff', () => {
