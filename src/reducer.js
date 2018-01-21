@@ -15,6 +15,27 @@ const calculateScore = history =>
     return score
   }, 0)
 
+const newStateWithUpdatedPlayer = (state, playerName, changes) => {
+  const playerIndex = state.players.findIndex(p => p.name === playerName)
+  const player = {...state.players[playerIndex], ...changes}
+  return {
+    ...state,
+    players: [
+      ...state.players.slice(0, playerIndex),
+      {
+        ...player,
+        score: calculateScore(player.history),
+      },
+      ...state.players.slice(playerIndex + 1),
+    ],
+  }
+}
+
+const extractPlayerFromState = (state, playerName) =>
+  state.players[state.players.findIndex(p => p.name === playerName)]
+
+////////////////////////////////////////////////////////////////////////////////
+
 const addPlayer = (state, playerName, target) => {
   const hasValidName = playerName && playerName.trim().length
   const hasValidTarget = target >= 31 && (target - 1) % 10 === 0
@@ -59,89 +80,44 @@ const previousPlayer = state => {
   }
 }
 
+// Note: Winning is not automatic to allow for 'undo'
 const addScoreToPlayer = (state, playerName, reason) => {
-  const playerIndex = state.players.findIndex(p => p.name === playerName)
-  const player = state.players[playerIndex]
+  const player = extractPlayerFromState(state, playerName)
 
   // Rule: Cannot score unless you cannon off the pink
   if (player.score === 0 && reason !== 'CANNON') return state
 
-  const newHistory = [...player.history, reason]
-  const newScore = calculateScore(newHistory)
-  const newState = {
-    ...state,
-    players: [
-      ...state.players.slice(0, playerIndex),
-      {
-        ...player,
-        score: newScore,
-        history: newHistory,
-      },
-      ...state.players.slice(playerIndex + 1),
-    ],
-  }
+  const newState = newStateWithUpdatedPlayer(state, playerName, {
+    history: [...player.history, reason],
+  })
+  const newScore = extractPlayerFromState(newState, playerName).score
 
-  // Winning is not automatic to allow for 'undo'
   const isOver = newScore === player.target - 1 || newScore > player.target
   return isOver ? resetPlayerScore(newState, playerName, 'OVER') : newState
 }
 
 const resetPlayerScore = (state, playerName, reason) => {
-  const playerIndex = state.players.findIndex(p => p.name === playerName)
-  const player = state.players[playerIndex]
-  const newHistory = [...player.history, reason]
-  const newScore = calculateScore(newHistory)
-  return {
-    ...state,
-    players: [
-      ...state.players.slice(0, playerIndex),
-      {
-        ...player,
-        score: newScore,
-        history: newHistory,
-      },
-      ...state.players.slice(playerIndex + 1),
-    ],
-  }
+  const player = extractPlayerFromState(state, playerName)
+  return newStateWithUpdatedPlayer(state, playerName, {
+    history: [...player.history, reason],
+  })
 }
 
 const undoPlayerScore = (state, playerName) => {
-  const playerIndex = state.players.findIndex(p => p.name === playerName)
-  const player = state.players[playerIndex]
-  const history = state.players[playerIndex].history
-  const newHistory = history.slice(0, history.length - 1)
-  const newScore = calculateScore(newHistory)
-  return {
-    ...state,
-    players: [
-      ...state.players.slice(0, playerIndex),
-      {
-        ...player,
-        score: newScore,
-        history: newHistory,
-      },
-      ...state.players.slice(playerIndex + 1),
-    ],
-  }
+  const player = extractPlayerFromState(state, playerName)
+  return newStateWithUpdatedPlayer(state, playerName, {
+    history: player.history.slice(0, player.history.length - 1),
+  })
 }
 
-const declareWinner = (state, winner) => {
-  const playerIndex = state.players.findIndex(p => p.name === winner)
-  const player = state.players[playerIndex]
+const declareWinner = (state, playerName) => {
+  const player = extractPlayerFromState(state, playerName)
   if (player.score !== player.target) return state
 
-  const newState = {
-    ...state,
-    players: [
-      ...state.players.slice(0, playerIndex),
-      {
-        ...player,
-        target: player.target + 10,
-        history: [...player.history, 'WIN'],
-      },
-      ...state.players.slice(playerIndex + 1),
-    ],
-  }
+  const newState = newStateWithUpdatedPlayer(state, playerName, {
+    target: player.target + 10,
+    history: [...player.history, 'WIN'],
+  })
   return endGame(newState)
 }
 
