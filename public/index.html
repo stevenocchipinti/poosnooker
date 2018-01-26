@@ -10,6 +10,14 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+
+    <!--
+      This is where MUI CSS will be injected. This is important because my
+      own CSS and that of styled components needs to go after MUI in order for
+      overrides to work.
+    -->
+    <noscript id="mui-insertion-point"></noscript>
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

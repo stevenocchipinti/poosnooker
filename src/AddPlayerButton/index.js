@@ -13,12 +13,8 @@ import {EventEmitter} from '../fire-event-store'
 const PlaceholderButton = styled(Button)`
   width: 220px;
   height: 100px;
-  /* TODO: Find a better alternative to !important and the override in
-   * CurrentPlayerPanel. See here for more info:
-   * https://material-ui-next.com/customization/css-in-js/#css-injection-order
-   */
-  background-color: #eee !important;
-  color: #888 !important;
+  background-color: #eee;
+  color: #888;
   font-size: 3em;
   margin: 10px;
 `

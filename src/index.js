@@ -10,6 +10,14 @@ import App from './App'
 import Home from './Home'
 import registerServiceWorker from './registerServiceWorker'
 
+import JssProvider from 'react-jss/lib/JssProvider'
+import {create} from 'jss'
+import {createGenerateClassName, jssPreset} from 'material-ui/styles'
+
+const generateClassName = createGenerateClassName()
+const jss = create(jssPreset())
+jss.options.insertionPoint = document.getElementById('mui-insertion-point')
+
 Firebase.initializeApp({
   apiKey: 'AIzaSyDrrvMbQ1RUbwMVIcr6QntAZ77qk5d-sBQ',
   authDomain: 'poo-snooker.firebaseapp.com',
@@ -20,12 +28,14 @@ Firebase.initializeApp({
 })
 
 ReactDOM.render(
-  <Router>
-    <Fragment>
-      <Route exact path="/" component={Home} />
-      <Route path="/game" component={App} />
-    </Fragment>
-  </Router>,
+  <JssProvider jss={jss} generateClassName={generateClassName}>
+    <Router>
+      <Fragment>
+        <Route exact path="/" component={Home} />
+        <Route path="/game" component={App} />
+      </Fragment>
+    </Router>
+  </JssProvider>,
   document.getElementById('root'),
 )
 registerServiceWorker()
