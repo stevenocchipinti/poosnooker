@@ -10,7 +10,7 @@ const StyledPaper = styled(Paper)`
 
 const ProgressBar = ({progress}) => (
   <div style={{position: 'absolute', bottom: 0, width: '100%'}}>
-    <LinearProgress mode="determinate" value={progress * 100} />
+    <LinearProgress variant="determinate" value={progress * 100} />
   </div>
 )
 
