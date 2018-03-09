@@ -1,16 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
-const colors = {
-  CANNON: 'gray',
-  YELLOW: 'yellow',
-  GREEN: 'green',
-  BLUE: 'blue',
-  PINK: 'pink',
-  BLACK: 'black',
-  FOUL: 'red',
-  POO: 'brown',
-}
+import {colors} from '../colors'
 
 const Wrapper = styled.div`
   display: flex;

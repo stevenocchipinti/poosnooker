@@ -6,6 +6,7 @@ import {PlayerCard} from '../PlayerCard'
 
 const Paddle = styled(Button)`
   font-size: 2em;
+  padding: 0;
 `
 const ChangePlayerPaddle = ({direction}) => {
   const events = {
@@ -15,7 +16,7 @@ const ChangePlayerPaddle = ({direction}) => {
   return (
     <EventEmitter stream="game-events">
       {emit => (
-        <Paddle dense onClick={() => emit(events[direction])}>
+        <Paddle size="small" onClick={() => emit(events[direction])}>
           {{previous: '\u27E8', next: '\u27E9'}[direction]}
         </Paddle>
       )}
@@ -30,6 +31,7 @@ const Section = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1;
 `
 
 export default ({currentPlayer, players}) => {
