@@ -14,7 +14,6 @@ import Menu, {MenuItem} from 'material-ui/Menu'
 const styles = {
   root: {
     width: '100%',
-    gridArea: 'appbar',
   },
   flex: {
     flex: 1,

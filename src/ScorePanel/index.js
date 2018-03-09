@@ -4,7 +4,6 @@ import {EventEmitter} from '../fire-event-store'
 import Button from 'material-ui/Button'
 
 const Section = styled.section`
-  grid-area: controls;
   display: grid;
   grid-gap: 7px;
   grid-template-columns: 1fr 1fr 1fr 1fr;

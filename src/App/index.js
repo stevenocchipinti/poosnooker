@@ -22,17 +22,6 @@ const Layout = styled.div`
   justify-content: space-between;
   width: 100vw;
   height: 100vh;
-
-  @media (min-width: 700px) {
-    display: grid;
-    grid-template-columns: auto 100px;
-    grid-template-rows: auto 1fr 1fr auto;
-    grid-template-areas:
-      'appbar         controls'
-      'current-player controls'
-      'other-players  controls'
-      'nav            controls';
-  }
 `
 
 const ProgressBar = styled.div`
@@ -47,12 +36,15 @@ const LoadingIndicator = ({visible}) => (
 )
 
 const NavBar = styled(BottomNavigation)`
-  grid-area: 'nav';
-  margin-top: 10px;
-
+  min-height: 56px;
   @media (min-width: 700px) {
     display: none;
   }
+`
+
+const Main = styled.main`
+  flex-grow: 1;
+  overflow: scroll;
 `
 
 export default ({match}) => (
@@ -71,7 +63,7 @@ export default ({match}) => (
           <LoadingIndicator visible={loaded} />
           <AppBar />
 
-          <main style={{flexGrow: 1}}>
+          <Main>
             <Switch>
               <Route
                 path={`${match.path}/leaderboard`}
@@ -97,7 +89,7 @@ export default ({match}) => (
 
               <Redirect from={match.path} to={`${match.path}/score`} />
             </Switch>
-          </main>
+          </Main>
 
           <NavBar value={currentRoute} showLabels>
             <BottomNavigationAction
