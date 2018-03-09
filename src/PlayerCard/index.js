@@ -41,6 +41,13 @@ const SmallPlayerInfoGrid = PlayerInfoGrid.extend`
     'score';
 `
 
+const PlayerCardItemLayout = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 1em;
+`
+
 export const PlayerCard = ({player}) => (
   <Card progress={player.score / player.target}>
     <PlayerInfoGrid>
@@ -67,4 +74,15 @@ export const SmallPlayerCard = ({player}) => (
       </PlayerScoreCell>
     </SmallPlayerInfoGrid>
   </SmallCard>
+)
+
+export const PlayerCardItem = ({player}) => (
+  <Card progress={player.score / player.target}>
+    <PlayerCardItemLayout>
+      <div>{player.name}</div>
+      <div>
+        <strong>{player.score}</strong> / {player.target}
+      </div>
+    </PlayerCardItemLayout>
+  </Card>
 )
