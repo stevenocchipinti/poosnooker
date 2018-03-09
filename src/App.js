@@ -76,7 +76,8 @@ export default ({match}) => (
   >
     {(state, loaded) => {
       const routeRegex = new RegExp(`${match.path}/([^/]*)`)
-      const currentRoute = routeRegex.exec(window.location.pathname)[1]
+      const result = routeRegex.exec(window.location.pathname)
+      const currentRoute = (result && result[1]) || ''
 
       return (
         <Layout>
