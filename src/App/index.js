@@ -1,20 +1,20 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import {Route, Redirect, Link, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
-import {FireEventStore} from './fire-event-store'
-import reducer from './reducer'
-import AppBar from './AppBar'
-import CurrentPlayerPanel from './CurrentPlayerPanel'
-import OtherPlayersPanel from './OtherPlayersPanel'
-import ScorePanel from './ScorePanel'
-
-import BottomNavigation, {
-  BottomNavigationAction,
-} from 'material-ui/BottomNavigation'
+import BottomNavigation from 'material-ui/BottomNavigation'
+import {BottomNavigationAction} from 'material-ui/BottomNavigation'
 import PeopleIcon from 'material-ui-icons/People'
 import ScoreIcon from 'material-ui-icons/Create'
 import ChartIcon from 'material-ui-icons/ShowChart'
+
+import ScoreTab from './ScoreTab'
+import LeaderboardTab from './LeaderboardTab'
+import ChartTab from './ChartTab'
+
+import {FireEventStore} from '../fire-event-store'
+import reducer from '../reducer'
+import AppBar from '../AppBar'
 
 const Layout = styled.div`
   display: flex;
@@ -55,19 +55,6 @@ const NavBar = styled(BottomNavigation)`
   }
 `
 
-const ScorePage = ({players, currentPlayerIndex}) => {
-  const currentPlayer = players[currentPlayerIndex]
-  const otherPlayers = players.filter(p => p.name !== currentPlayer.name)
-
-  return (
-    <Fragment>
-      <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
-      <OtherPlayersPanel players={otherPlayers} />
-      <ScorePanel currentPlayer={currentPlayer} />
-    </Fragment>
-  )
-}
-
 export default ({match}) => (
   <FireEventStore
     stream="game-events"
@@ -84,29 +71,33 @@ export default ({match}) => (
           <LoadingIndicator visible={loaded} />
           <AppBar />
 
-          <Switch>
-            <Route
-              path={`${match.path}/leaderboard`}
-              render={() => <div>Leaderboard goes here</div>}
-            />
+          <main style={{flexGrow: 1}}>
+            <Switch>
+              <Route
+                path={`${match.path}/leaderboard`}
+                render={() => (
+                  <LeaderboardTab
+                    players={state.players}
+                    currentPlayerIndex={state.currentPlayerIndex}
+                  />
+                )}
+              />
 
-            <Route
-              path={`${match.path}/score`}
-              render={() => (
-                <ScorePage
-                  players={state.players}
-                  currentPlayerIndex={state.currentPlayerIndex}
-                />
-              )}
-            />
+              <Route
+                path={`${match.path}/score`}
+                render={() => (
+                  <ScoreTab
+                    players={state.players}
+                    currentPlayerIndex={state.currentPlayerIndex}
+                  />
+                )}
+              />
 
-            <Route
-              path={`${match.path}/chart`}
-              render={() => <div>Chart goes here</div>}
-            />
+              <Route path={`${match.path}/chart`} render={() => <ChartTab />} />
 
-            <Redirect from={match.path} to={`${match.path}/score`} />
-          </Switch>
+              <Redirect from={match.path} to={`${match.path}/score`} />
+            </Switch>
+          </main>
 
           <NavBar value={currentRoute} showLabels>
             <BottomNavigationAction
