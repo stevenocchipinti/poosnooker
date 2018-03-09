@@ -75,6 +75,9 @@ export default ({match}) => (
     reducer={reducer}
   >
     {(state, loaded) => {
+      const routeRegex = new RegExp(`${match.path}/([^/]*)`)
+      const currentRoute = routeRegex.exec(window.location.pathname)[1]
+
       return (
         <Layout>
           <LoadingIndicator visible={loaded} />
@@ -82,12 +85,12 @@ export default ({match}) => (
 
           <Switch>
             <Route
-              path={`${match.url}/leaderboard`}
+              path={`${match.path}/leaderboard`}
               render={() => <div>Leaderboard goes here</div>}
             />
 
             <Route
-              path={`${match.url}/score`}
+              path={`${match.path}/score`}
               render={() => (
                 <ScorePage
                   players={state.players}
@@ -97,14 +100,14 @@ export default ({match}) => (
             />
 
             <Route
-              path={`${match.url}/chart`}
+              path={`${match.path}/chart`}
               render={() => <div>Chart goes here</div>}
             />
 
-            <Redirect from={match.url} to={`${match.url}/score`} />
+            <Redirect from={match.path} to={`${match.path}/score`} />
           </Switch>
 
-          <NavBar value="score" showLabels>
+          <NavBar value={currentRoute} showLabels>
             <BottomNavigationAction
               value="leaderboard"
               label="Leaderboard"
