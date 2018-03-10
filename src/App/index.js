@@ -42,12 +42,6 @@ const NavBar = styled(BottomNavigation)`
   }
 `
 
-const Main = styled.main`
-  position: relative;
-  flex-grow: 1;
-  overflow: scroll;
-`
-
 export default ({match}) => (
   <FireEventStore
     stream="game-events"
@@ -64,33 +58,31 @@ export default ({match}) => (
           <LoadingIndicator visible={loaded} />
           <AppBar />
 
-          <Main>
-            <Switch>
-              <Route
-                path={`${match.path}/leaderboard`}
-                render={() => (
-                  <LeaderboardTab
-                    players={state.players}
-                    currentPlayerIndex={state.currentPlayerIndex}
-                  />
-                )}
-              />
+          <Switch>
+            <Route
+              path={`${match.path}/leaderboard`}
+              render={() => (
+                <LeaderboardTab
+                  players={state.players}
+                  currentPlayerIndex={state.currentPlayerIndex}
+                />
+              )}
+            />
 
-              <Route
-                path={`${match.path}/score`}
-                render={() => (
-                  <ScoreTab
-                    players={state.players}
-                    currentPlayerIndex={state.currentPlayerIndex}
-                  />
-                )}
-              />
+            <Route
+              path={`${match.path}/score`}
+              render={() => (
+                <ScoreTab
+                  players={state.players}
+                  currentPlayerIndex={state.currentPlayerIndex}
+                />
+              )}
+            />
 
-              <Route path={`${match.path}/chart`} render={() => <ChartTab />} />
+            <Route path={`${match.path}/chart`} render={() => <ChartTab />} />
 
-              <Redirect from={match.path} to={`${match.path}/score`} />
-            </Switch>
-          </Main>
+            <Redirect from={match.path} to={`${match.path}/score`} />
+          </Switch>
 
           <NavBar value={currentRoute} showLabels>
             <BottomNavigationAction

@@ -2,22 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import AddIcon from 'material-ui-icons/Add'
+import TabPanel from './TabPanel'
 import {PlayerCardItem} from '../PlayerCard'
 import AddPlayerDialog from '../AddPlayerDialog'
 
 const AddPlayerButton = styled(Button)`
   position: fixed;
-  right: 10px;
-  bottom: 66px;
+  right: 20px;
+  bottom: 76px;
 `
 
-const Container = styled.div`
-  margin-bottom: 76px;
+const TabPanelContainer = TabPanel.extend`
+  padding-bottom: 86px;
 `
 
 export default ({players, currentPlayerIndex}) => {
   return (
-    <Container>
+    <TabPanelContainer>
       {players.map(player => (
         <PlayerCardItem key={player.name} player={player} />
       ))}
@@ -33,6 +34,6 @@ export default ({players, currentPlayerIndex}) => {
           </AddPlayerButton>
         )}
       </AddPlayerDialog>
-    </Container>
+    </TabPanelContainer>
   )
 }
