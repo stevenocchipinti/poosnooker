@@ -1,7 +1,5 @@
 import React, {Fragment} from 'react'
-import styled from 'styled-components'
 import Button from 'material-ui/Button'
-import PersonAddIcon from 'material-ui-icons/PersonAdd'
 import TextField from 'material-ui/TextField'
 import Dialog, {
   DialogActions,
@@ -9,15 +7,6 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog'
 import {EventEmitter} from '../fire-event-store'
-
-const PlaceholderButton = styled(Button)`
-  width: 220px;
-  height: 100px;
-  background-color: #eee;
-  color: #888;
-  font-size: 3em;
-  margin: 10px;
-`
 
 export default class AddPlayerButton extends React.Component {
   defaultState = {
@@ -49,14 +38,12 @@ export default class AddPlayerButton extends React.Component {
   }
 
   render() {
+    const render = this.props.children
+
     return (
       <Fragment>
-        <PlaceholderButton
-          onClick={() => this.handleOpen()}
-          aria-label="Add Player"
-        >
-          <PersonAddIcon />
-        </PlaceholderButton>
+        {render(() => this.handleOpen())}
+
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

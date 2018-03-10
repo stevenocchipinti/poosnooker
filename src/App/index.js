@@ -1,20 +1,20 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import {Route, Redirect, Link, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
-import {FireEventStore} from './fire-event-store'
-import reducer from './reducer'
-import AppBar from './AppBar'
-import CurrentPlayerPanel from './CurrentPlayerPanel'
-import OtherPlayersPanel from './OtherPlayersPanel'
-import ScorePanel from './ScorePanel'
-
-import BottomNavigation, {
-  BottomNavigationAction,
-} from 'material-ui/BottomNavigation'
+import BottomNavigation from 'material-ui/BottomNavigation'
+import {BottomNavigationAction} from 'material-ui/BottomNavigation'
 import PeopleIcon from 'material-ui-icons/People'
 import ScoreIcon from 'material-ui-icons/Create'
 import ChartIcon from 'material-ui-icons/ShowChart'
+
+import ScoreTab from './ScoreTab'
+import LeaderboardTab from './LeaderboardTab'
+import ChartTab from './ChartTab'
+
+import {FireEventStore} from '../fire-event-store'
+import reducer from '../reducer'
+import AppBar from '../AppBar'
 
 const Layout = styled.div`
   display: flex;
@@ -22,17 +22,6 @@ const Layout = styled.div`
   justify-content: space-between;
   width: 100vw;
   height: 100vh;
-
-  @media (min-width: 700px) {
-    display: grid;
-    grid-template-columns: auto 100px;
-    grid-template-rows: auto 1fr 1fr auto;
-    grid-template-areas:
-      'appbar         controls'
-      'current-player controls'
-      'other-players  controls'
-      'nav            controls';
-  }
 `
 
 const ProgressBar = styled.div`
@@ -47,26 +36,17 @@ const LoadingIndicator = ({visible}) => (
 )
 
 const NavBar = styled(BottomNavigation)`
-  grid-area: 'nav';
-  margin-top: 10px;
-
+  min-height: 56px;
   @media (min-width: 700px) {
     display: none;
   }
 `
 
-const ScorePage = ({players, currentPlayerIndex}) => {
-  const currentPlayer = players[currentPlayerIndex]
-  const otherPlayers = players.filter(p => p.name !== currentPlayer.name)
-
-  return (
-    <Fragment>
-      <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
-      <OtherPlayersPanel players={otherPlayers} />
-      <ScorePanel currentPlayer={currentPlayer} />
-    </Fragment>
-  )
-}
+const Main = styled.main`
+  position: relative;
+  flex-grow: 1;
+  overflow: scroll;
+`
 
 export default ({match}) => (
   <FireEventStore
@@ -84,29 +64,33 @@ export default ({match}) => (
           <LoadingIndicator visible={loaded} />
           <AppBar />
 
-          <Switch>
-            <Route
-              path={`${match.path}/leaderboard`}
-              render={() => <div>Leaderboard goes here</div>}
-            />
+          <Main>
+            <Switch>
+              <Route
+                path={`${match.path}/leaderboard`}
+                render={() => (
+                  <LeaderboardTab
+                    players={state.players}
+                    currentPlayerIndex={state.currentPlayerIndex}
+                  />
+                )}
+              />
 
-            <Route
-              path={`${match.path}/score`}
-              render={() => (
-                <ScorePage
-                  players={state.players}
-                  currentPlayerIndex={state.currentPlayerIndex}
-                />
-              )}
-            />
+              <Route
+                path={`${match.path}/score`}
+                render={() => (
+                  <ScoreTab
+                    players={state.players}
+                    currentPlayerIndex={state.currentPlayerIndex}
+                  />
+                )}
+              />
 
-            <Route
-              path={`${match.path}/chart`}
-              render={() => <div>Chart goes here</div>}
-            />
+              <Route path={`${match.path}/chart`} render={() => <ChartTab />} />
 
-            <Redirect from={match.path} to={`${match.path}/score`} />
-          </Switch>
+              <Redirect from={match.path} to={`${match.path}/score`} />
+            </Switch>
+          </Main>
 
           <NavBar value={currentRoute} showLabels>
             <BottomNavigationAction
