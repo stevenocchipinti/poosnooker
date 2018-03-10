@@ -43,6 +43,7 @@ const NavBar = styled(BottomNavigation)`
 `
 
 const Main = styled.main`
+  position: relative;
   flex-grow: 1;
   overflow: scroll;
 `
