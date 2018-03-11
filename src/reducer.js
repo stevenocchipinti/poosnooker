@@ -80,6 +80,11 @@ const previousPlayer = state => {
   }
 }
 
+const selectPlayer = (state, playerName) => {
+  const index = state.players.findIndex(n => n.name === playerName)
+  return index === -1 ? state : {...state, currentPlayerIndex: index}
+}
+
 // Note: Winning is not automatic to allow for 'undo'
 const addScoreToPlayer = (state, playerName, reason) => {
   const player = extractPlayerFromState(state, playerName)
@@ -150,6 +155,8 @@ export default (state = initialState, action) => {
       return nextPlayer(state)
     case 'PREVIOUS_PLAYER':
       return previousPlayer(state)
+    case 'SELECT_PLAYER':
+      return selectPlayer(state, action.player)
 
     // TODO: This should probably be a deterministic REORDER action
     // case 'SHUFFLE_PLAYERS':

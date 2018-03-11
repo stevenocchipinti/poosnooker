@@ -16,24 +16,28 @@ const TabPanelContainer = TabPanel.extend`
   padding-bottom: 86px;
 `
 
-export default ({players, currentPlayerIndex}) => {
-  return (
-    <TabPanelContainer>
-      {players.map(player => (
-        <PlayerCardItem key={player.name} player={player} />
-      ))}
-      <AddPlayerDialog>
-        {showDialog => (
-          <AddPlayerButton
-            onClick={() => showDialog()}
-            variant="fab"
-            color="primary"
-            aria-label="add"
-          >
-            <AddIcon />
-          </AddPlayerButton>
-        )}
-      </AddPlayerDialog>
-    </TabPanelContainer>
-  )
-}
+export default ({players, currentPlayerIndex, onPlayerSelect}) => (
+  <TabPanelContainer>
+    {players.map((player, i) => (
+      <PlayerCardItem
+        key={i}
+        player={player}
+        onClick={() => onPlayerSelect(player)}
+        style={i === currentPlayerIndex ? {fontWeight: 'bold'} : {}}
+      />
+    ))}
+
+    <AddPlayerDialog>
+      {showDialog => (
+        <AddPlayerButton
+          onClick={() => showDialog()}
+          variant="fab"
+          color="primary"
+          aria-label="add"
+        >
+          <AddIcon />
+        </AddPlayerButton>
+      )}
+    </AddPlayerDialog>
+  </TabPanelContainer>
+)

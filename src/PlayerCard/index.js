@@ -76,8 +76,8 @@ export const SmallPlayerCard = ({player}) => (
   </SmallCard>
 )
 
-export const PlayerCardItem = ({player}) => (
-  <Card progress={player.score / player.target}>
+export const PlayerCardItem = ({player, ...props}) => (
+  <Card {...props} progress={player.score / player.target}>
     <PlayerCardItemLayout>
       <div>{player.name}</div>
       <div>

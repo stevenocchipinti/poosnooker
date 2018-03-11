@@ -287,6 +287,34 @@ describe('undo', () => {
   })
 })
 
+describe('selecting a player', () => {
+  const actions = [
+    {type: 'ADD_PLAYER', player: 'Steve', target: 31},
+    {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+    {type: 'ADD_PLAYER', player: 'Sandy', target: 31},
+  ]
+
+  describe('when the selected player exists', () => {
+    const newState = [
+      ...actions,
+      {type: 'SELECT_PLAYER', player: 'Sandy'},
+    ].reduce(reduce, undefined)
+    it('sets the currentPlayerIndex to the index of the selected player', () => {
+      expect(newState.currentPlayerIndex).toEqual(2)
+    })
+  })
+
+  describe('when the selected player exists', () => {
+    const newState = [
+      ...actions,
+      {type: 'SELECT_PLAYER', player: 'Nobody'},
+    ].reduce(reduce, undefined)
+    it("doesn't change the currentPlayerIndex", () => {
+      expect(newState.currentPlayerIndex).toEqual(0)
+    })
+  })
+})
+
 // Being lazy, should probably write single purpose unit tests :/
 describe('a typical scenario (aka lazy integration test)', () => {
   it('does a bunch of stuff', () => {

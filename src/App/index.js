@@ -59,7 +59,7 @@ const UndoButton = ({player}) => (
   </EventEmitter>
 )
 
-export default ({match, location}) => (
+export default ({match, location, history}) => (
   <FireEventStore
     stream="game-events"
     firebaseKey={`/sessions/${match.params.sessionId}/events`}
@@ -83,10 +83,18 @@ export default ({match, location}) => (
             <Route
               path={`${match.url}/leaderboard`}
               render={() => (
-                <LeaderboardTab
-                  players={state.players}
-                  currentPlayerIndex={state.currentPlayerIndex}
-                />
+                <EventEmitter stream="game-events">
+                  {emit => (
+                    <LeaderboardTab
+                      players={state.players}
+                      currentPlayerIndex={state.currentPlayerIndex}
+                      onPlayerSelect={player => {
+                        emit({type: 'SELECT_PLAYER', player: player.name})
+                        history.push(`${match.url}/score`)
+                      }}
+                    />
+                  )}
+                </EventEmitter>
               )}
             />
 
