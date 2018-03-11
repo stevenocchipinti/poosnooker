@@ -34,41 +34,43 @@ const EmitterButton = ({player, event, children, ...props}) => (
   </EventEmitter>
 )
 
-const ScoreButton = ({player, reason, children}) => (
-  <EmitterButton event={{type: 'SCORE', reason}} player={player}>
+const ScoreButton = ({player, reason, children, ...props}) => (
+  <EmitterButton event={{type: 'SCORE', reason}} player={player} {...props}>
     {children}
   </EmitterButton>
 )
 
-const ResetButton = ({player, reason, children}) => (
+const ResetButton = ({player, reason, children, ...props}) => (
   <EmitterButton
     event={{type: 'RESET_SCORE', reason}}
     player={player}
     style={{color: 'red'}}
+    {...props}
   >
     {children}
   </EmitterButton>
 )
 
 export default ({currentPlayer}) => {
+  const hasPoints = currentPlayer && currentPlayer.score > 0
   return (
     <Section>
       <ScoreButton player={currentPlayer} reason="CANNON">
         Cannon
       </ScoreButton>
-      <ScoreButton player={currentPlayer} reason="YELLOW">
+      <ScoreButton disabled={!hasPoints} player={currentPlayer} reason="YELLOW">
         2
       </ScoreButton>
-      <ScoreButton player={currentPlayer} reason="GREEN">
+      <ScoreButton disabled={!hasPoints} player={currentPlayer} reason="GREEN">
         3
       </ScoreButton>
-      <ScoreButton player={currentPlayer} reason="BLUE">
+      <ScoreButton disabled={!hasPoints} player={currentPlayer} reason="BLUE">
         5
       </ScoreButton>
-      <ScoreButton player={currentPlayer} reason="PINK">
+      <ScoreButton disabled={!hasPoints} player={currentPlayer} reason="PINK">
         6
       </ScoreButton>
-      <ScoreButton player={currentPlayer} reason="BLACK">
+      <ScoreButton disabled={!hasPoints} player={currentPlayer} reason="BLACK">
         7
       </ScoreButton>
       <ResetButton player={currentPlayer} reason="FOUL">
