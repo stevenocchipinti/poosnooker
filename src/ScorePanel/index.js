@@ -1,97 +1,80 @@
 import React from 'react'
 import styled from 'styled-components'
 import {EventEmitter} from '../fire-event-store'
-import Button from 'material-ui/Button'
+import MuiButton from 'material-ui/Button'
 
 const Section = styled.section`
   display: grid;
-  grid-gap: 7px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-items: center;
+  background-color: #333;
+  padding: 20px;
 
   @media (min-width: 700px) {
     grid-template-columns: 1fr;
   }
 `
 
-const RoundButton = styled(Button)`
-  border-radius: 50%;
-  width: 20vw;
-  height: 20vw;
-
-  @media (min-width: 700px) {
-    width: auto;
-    height: auto;
-  }
+const Button = styled(MuiButton)`
+  padding: 15px;
 `
 
-const ScoreButton = ({player, value, children}) => {
-  return (
-    <EventEmitter stream="game-events">
-      {emit => (
-        <RoundButton
-          onClick={() =>
-            emit({type: 'SCORE', player: player.name, reason: value})
-          }
-          color="primary"
-          size="small"
-          variant="raised"
-        >
-          {children}
-        </RoundButton>
-      )}
-    </EventEmitter>
-  )
-}
+const EmitterButton = ({player, event, children, ...props}) => (
+  <EventEmitter stream="game-events">
+    {emit => (
+      <Button
+        onClick={() => emit({player: player.name, ...event})}
+        size="small"
+        style={{color: 'white'}}
+        {...props}
+      >
+        {children}
+      </Button>
+    )}
+  </EventEmitter>
+)
 
-const ResetButton = ({player, value, children}) => {
-  return (
-    <EventEmitter stream="game-events">
-      {emit => (
-        <RoundButton
-          onClick={() =>
-            emit({
-              type: 'RESET_SCORE',
-              player: player.name,
-              reason: value,
-            })
-          }
-          color="secondary"
-          size="small"
-          variant="raised"
-        >
-          {children}
-        </RoundButton>
-      )}
-    </EventEmitter>
-  )
-}
+const ScoreButton = ({player, reason, children}) => (
+  <EmitterButton event={{type: 'SCORE', reason}} player={player}>
+    {children}
+  </EmitterButton>
+)
+
+const ResetButton = ({player, reason, children}) => (
+  <EmitterButton
+    event={{type: 'RESET_SCORE', reason}}
+    player={player}
+    style={{color: 'red'}}
+  >
+    {children}
+  </EmitterButton>
+)
 
 export default ({currentPlayer}) => {
   return (
     <Section>
-      <ScoreButton player={currentPlayer} value="CANNON">
+      <ScoreButton player={currentPlayer} reason="CANNON">
         Cannon
       </ScoreButton>
-      <ScoreButton player={currentPlayer} value="YELLOW">
+      <ScoreButton player={currentPlayer} reason="YELLOW">
         2
       </ScoreButton>
-      <ScoreButton player={currentPlayer} value="GREEN">
+      <ScoreButton player={currentPlayer} reason="GREEN">
         3
       </ScoreButton>
-      <ScoreButton player={currentPlayer} value="BLUE">
+      <ScoreButton player={currentPlayer} reason="BLUE">
         5
       </ScoreButton>
-      <ScoreButton player={currentPlayer} value="PINK">
+      <ScoreButton player={currentPlayer} reason="PINK">
         6
       </ScoreButton>
-      <ScoreButton player={currentPlayer} value="BLACK">
+      <ScoreButton player={currentPlayer} reason="BLACK">
         7
       </ScoreButton>
-      <ResetButton player={currentPlayer} value="FOUL">
+      <ResetButton player={currentPlayer} reason="FOUL">
         Foul
       </ResetButton>
-      <ResetButton player={currentPlayer} value="POO">
+      <ResetButton player={currentPlayer} reason="POO">
         Poo
       </ResetButton>
     </Section>
