@@ -1,38 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
-import {EventEmitter} from '../fire-event-store'
-import MuiButton from 'material-ui/Button'
-
-const Section = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  justify-items: center;
-  background-color: #333;
-  padding: 20px;
-
-  @media (min-width: 700px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const Button = styled(MuiButton)`
-  padding: 15px;
-`
-
-const EmitterButton = ({player, event, children, ...props}) => (
-  <EventEmitter stream="game-events">
-    {emit => (
-      <Button
-        onClick={() => emit({player: player.name, ...event})}
-        size="small"
-        style={{color: 'white'}}
-        {...props}
-      >
-        {children}
-      </Button>
-    )}
-  </EventEmitter>
-)
+import React, {Fragment} from 'react'
+import EmitterButton from './EmitterButton'
 
 const ScoreButton = ({player, reason, children, ...props}) => (
   <EmitterButton event={{type: 'SCORE', reason}} player={player} {...props}>
@@ -54,7 +21,7 @@ const ResetButton = ({player, reason, children, ...props}) => (
 export default ({currentPlayer}) => {
   const hasPoints = currentPlayer && currentPlayer.score > 0
   return (
-    <Section>
+    <Fragment>
       <ScoreButton player={currentPlayer} reason="CANNON">
         Cannon
       </ScoreButton>
@@ -79,6 +46,6 @@ export default ({currentPlayer}) => {
       <ResetButton player={currentPlayer} reason="POO">
         Poo
       </ResetButton>
-    </Section>
+    </Fragment>
   )
 }

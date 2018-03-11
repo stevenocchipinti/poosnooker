@@ -2,7 +2,7 @@ import React from 'react'
 import TabPanel from './TabPanel'
 import CurrentPlayerPanel from '../CurrentPlayerPanel'
 import OtherPlayersPanel from '../OtherPlayersPanel'
-import ScorePanel from '../ScorePanel'
+import ActionPanel from '../ActionPanel'
 
 const TabPanelContainer = TabPanel.extend`
   display: flex;
@@ -17,7 +17,7 @@ export default ({players, currentPlayerIndex}) => {
     <TabPanelContainer>
       <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
       <OtherPlayersPanel players={otherPlayers} />
-      <ScorePanel currentPlayer={currentPlayer} />
+      <ActionPanel currentPlayer={currentPlayer} />
     </TabPanelContainer>
   )
 }
