@@ -42,15 +42,15 @@ const NavBar = styled(BottomNavigation)`
   }
 `
 
-export default ({match}) => (
+export default ({match, location}) => (
   <FireEventStore
     stream="game-events"
     firebaseKey="/groups/founders/sessions/qjIs6NZLOXvDC435C5Af/events"
     reducer={reducer}
   >
     {(state, loaded) => {
-      const routeRegex = new RegExp(`${match.path}/([^/]*)`)
-      const result = routeRegex.exec(window.location.pathname)
+      const routeRegex = new RegExp(`${match.url}/([^/]*)`)
+      const result = routeRegex.exec(location.pathname)
       const currentRoute = (result && result[1]) || ''
 
       return (
@@ -60,7 +60,7 @@ export default ({match}) => (
 
           <Switch>
             <Route
-              path={`${match.path}/leaderboard`}
+              path={`${match.url}/leaderboard`}
               render={() => (
                 <LeaderboardTab
                   players={state.players}
@@ -70,7 +70,7 @@ export default ({match}) => (
             />
 
             <Route
-              path={`${match.path}/score`}
+              path={`${match.url}/score`}
               render={() => (
                 <ScoreTab
                   players={state.players}
@@ -79,9 +79,9 @@ export default ({match}) => (
               )}
             />
 
-            <Route path={`${match.path}/chart`} render={() => <ChartTab />} />
+            <Route path={`${match.url}/chart`} render={() => <ChartTab />} />
 
-            <Redirect from={match.path} to={`${match.path}/score`} />
+            <Redirect from={match.url} to={`${match.url}/score`} />
           </Switch>
 
           <NavBar value={currentRoute} showLabels>
