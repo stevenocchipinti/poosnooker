@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Firebase from 'firebase'
 
 import 'typeface-roboto'
@@ -31,8 +31,13 @@ ReactDOM.render(
   <JssProvider jss={jss} generateClassName={generateClassName}>
     <Router>
       <Fragment>
-        <Route exact path="/" component={Home} />
-        <Route path="/game" component={App} />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/sessions/:sessionId" component={App} />
+          {/* TODO: Another route for group games
+          <Route path="/groups/:groupId/sessions/:sessionId" component={App} />
+          */}
+        </Switch>
       </Fragment>
     </Router>
   </JssProvider>,

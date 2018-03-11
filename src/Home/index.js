@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react'
+import React, {Component, Fragment} from 'react'
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
-import {Link} from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
+import {createNewGame} from '../backend'
 import Hero from './Hero'
 import rulesMarkdown from './rules'
 import heroImage from './hero.jpg' // ref: https://pxhere.com/en/photo/813038
@@ -39,23 +39,44 @@ const ResponsiveImg = styled.img`
   height: auto;
 `
 
-export default () => (
-  <Fragment>
-    <Hero src={heroImage}>
-      <h1>Poo Snooker</h1>
-      <ButtonPanel>
-        <Button component={Link} to="/game" raised color="primary">
-          Start new game
-        </Button>
-        <Button raised color="primary">
-          Register a group
-        </Button>
-      </ButtonPanel>
-    </Hero>
-    <h1>How To Play</h1>
-    <Panel>
-      <ResponsiveImg src={setupImage} alt="Table setup" />
-      <Markdown source={rulesMarkdown} />
-    </Panel>
-  </Fragment>
-)
+export default class Home extends Component {
+  // TODO: Show loading indicator while waiting for a new game id
+  state = {loading: false}
+
+  async newAnonymousGame() {
+    this.setState({loading: true})
+    const gameUrl = await createNewGame()
+    this.props.history.push(gameUrl)
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <Hero src={heroImage}>
+          <h1>Poo Snooker</h1>
+          <ButtonPanel>
+            <Button
+              onClick={() => this.newAnonymousGame()}
+              variant="raised"
+              size="large"
+              color="primary"
+            >
+              Start new game
+            </Button>
+            {/* TODO: Groups
+            <Button variant="raised" color="primary">
+              Register a group
+            </Button>
+            */}
+          </ButtonPanel>
+        </Hero>
+
+        <h1>How To Play</h1>
+        <Panel>
+          <ResponsiveImg src={setupImage} alt="Table setup" />
+          <Markdown source={rulesMarkdown} />
+        </Panel>
+      </Fragment>
+    )
+  }
+}
