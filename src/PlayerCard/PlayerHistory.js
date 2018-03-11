@@ -14,6 +14,7 @@ const Ball = styled.div`
   border-radius: 50%;
   margin: 3px;
   background: ${props => colors[props.event]};
+  box-shadow: 0px 0px 1px 0px black;
 `
 
 export default ({history}) => {
