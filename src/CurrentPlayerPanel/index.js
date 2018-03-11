@@ -29,6 +29,7 @@ const Section = styled.section`
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  text-align: center;
 `
 
 export default ({currentPlayer, players}) => {

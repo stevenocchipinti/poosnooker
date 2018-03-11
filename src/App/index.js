@@ -45,13 +45,15 @@ const NavBar = styled(BottomNavigation)`
 export default ({match, location}) => (
   <FireEventStore
     stream="game-events"
-    firebaseKey="/groups/founders/sessions/qjIs6NZLOXvDC435C5Af/events"
+    firebaseKey={`/sessions/${match.params.sessionId}/events`}
     reducer={reducer}
   >
     {(state, loaded) => {
       const routeRegex = new RegExp(`${match.url}/([^/]*)`)
       const result = routeRegex.exec(location.pathname)
       const currentRoute = (result && result[1]) || ''
+
+      const hasPlayers = state.players && state.players.length > 0
 
       return (
         <Layout>
@@ -79,9 +81,11 @@ export default ({match, location}) => (
               )}
             />
 
-            <Route path={`${match.url}/chart`} render={() => <ChartTab />} />
+            {hasPlayers && (
+              <Route path={`${match.url}/chart`} render={() => <ChartTab />} />
+            )}
 
-            <Redirect from={match.url} to={`${match.url}/score`} />
+            <Redirect from={match.url} to={`${match.url}/leaderboard`} />
           </Switch>
 
           <NavBar value={currentRoute} showLabels>
@@ -98,6 +102,7 @@ export default ({match, location}) => (
               icon={<ScoreIcon />}
               component={Link}
               to={`${match.url}/score`}
+              disabled={!hasPlayers}
             />
             <BottomNavigationAction
               value="chart"
@@ -105,6 +110,7 @@ export default ({match, location}) => (
               icon={<ChartIcon />}
               component={Link}
               to={`${match.url}/chart`}
+              disabled={!hasPlayers}
             />
           </NavBar>
         </Layout>
