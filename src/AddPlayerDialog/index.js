@@ -46,7 +46,7 @@ export default class AddPlayerButton extends React.Component {
 
         <Dialog
           open={this.state.open}
-          onClose={this.handleClose}
+          onClose={() => this.handleClose()}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Add New Player</DialogTitle>
