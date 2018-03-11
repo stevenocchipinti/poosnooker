@@ -8,7 +8,7 @@ import MenuIcon from 'material-ui-icons/Menu'
 import AccountCircle from 'material-ui-icons/AccountCircle'
 import Menu, {MenuItem} from 'material-ui/Menu'
 
-// This code was copied straight from:
+// Most of this code was copied straight from:
 // https://material-ui-next.com/demos/app-bar/
 
 const styles = {
@@ -43,7 +43,7 @@ class MenuAppBar extends React.Component {
   }
 
   render() {
-    const {classes} = this.props
+    const {classes, utilityButton} = this.props
     const {auth, anchorEl} = this.state
     const open = Boolean(anchorEl)
 
@@ -62,6 +62,7 @@ class MenuAppBar extends React.Component {
           </Typography>
           {auth && (
             <div>
+              {utilityButton}
               <IconButton
                 aria-owns={open ? 'menu-appbar' : null}
                 aria-haspopup="true"

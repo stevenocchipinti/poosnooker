@@ -8,11 +8,14 @@ import PeopleIcon from 'material-ui-icons/People'
 import ScoreIcon from 'material-ui-icons/Create'
 import ChartIcon from 'material-ui-icons/ShowChart'
 
+import IconButton from 'material-ui/IconButton'
+import UndoIcon from 'material-ui-icons/Undo'
+
 import ScoreTab from './ScoreTab'
 import LeaderboardTab from './LeaderboardTab'
 import ChartTab from './ChartTab'
 
-import {FireEventStore} from '../fire-event-store'
+import {FireEventStore, EventEmitter} from '../fire-event-store'
 import reducer from '../reducer'
 import AppBar from '../AppBar'
 
@@ -42,6 +45,20 @@ const NavBar = styled(BottomNavigation)`
   }
 `
 
+const UndoButton = ({player}) => (
+  <EventEmitter stream="game-events">
+    {emit => (
+      <IconButton
+        onClick={() => emit({type: 'UNDO', player: player.name})}
+        color="inherit"
+        disabled={!player || player.history.length === 0}
+      >
+        <UndoIcon />
+      </IconButton>
+    )}
+  </EventEmitter>
+)
+
 export default ({match, location}) => (
   <FireEventStore
     stream="game-events"
@@ -54,11 +71,13 @@ export default ({match, location}) => (
       const currentRoute = (result && result[1]) || ''
 
       const hasPlayers = state.players && state.players.length > 0
+      const currentPlayer = state.players[state.currentPlayerIndex]
 
       return (
         <Layout>
           <LoadingIndicator visible={loaded} />
-          <AppBar />
+
+          <AppBar utilityButton={<UndoButton player={currentPlayer} />} />
 
           <Switch>
             <Route
