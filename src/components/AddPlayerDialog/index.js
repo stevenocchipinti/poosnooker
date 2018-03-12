@@ -6,7 +6,7 @@ import Dialog, {
   DialogContent,
   DialogTitle,
 } from 'material-ui/Dialog'
-import {EventEmitter} from '../fire-event-store'
+import {EventEmitter} from '../../fire-event-store'
 
 export default class AddPlayerButton extends React.Component {
   defaultState = {

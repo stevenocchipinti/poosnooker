@@ -3,7 +3,7 @@ import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
-import {createNewGame} from '../backend'
+import {createNewGame} from '../../backend'
 import Hero from './Hero'
 import rulesMarkdown from './rules'
 import heroImage from './hero.jpg' // ref: https://pxhere.com/en/photo/813038

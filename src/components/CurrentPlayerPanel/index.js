@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
-import {EventEmitter} from '../fire-event-store'
+import {EventEmitter} from '../../fire-event-store'
 import {PlayerCard} from '../PlayerCard'
 
 const Paddle = styled(Button)`

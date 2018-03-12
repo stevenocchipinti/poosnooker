@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import MuiButton from 'material-ui/Button'
-import {EventEmitter} from '../fire-event-store'
+import {EventEmitter} from '../../fire-event-store'
 
 const Button = styled(MuiButton)`
   padding: 15px;

@@ -10,13 +10,14 @@ import ChartIcon from 'material-ui-icons/ShowChart'
 
 import IconButton from 'material-ui/IconButton'
 import UndoIcon from 'material-ui-icons/Undo'
+import ShuffleIcon from 'material-ui-icons/Shuffle'
 
 import ScoreTab from './ScoreTab'
 import LeaderboardTab from './LeaderboardTab'
 import ChartTab from './ChartTab'
 
-import {FireEventStore, EventEmitter} from '../fire-event-store'
-import reducer from '../reducer'
+import {FireEventStore, EventEmitter} from '../../fire-event-store'
+import reducer from '../../reducer'
 import AppBar from '../AppBar'
 
 const Layout = styled.div`
@@ -59,6 +60,19 @@ const UndoButton = ({player}) => (
   </EventEmitter>
 )
 
+const ShuffleButton = () => (
+  <EventEmitter stream="game-events">
+    {emit => (
+      <IconButton
+        onClick={() => emit({type: 'SHUFFLE_PLAYERS', seed: Math.random()})}
+        color="inherit"
+      >
+        <ShuffleIcon />
+      </IconButton>
+    )}
+  </EventEmitter>
+)
+
 export default ({match, location, history}) => (
   <FireEventStore
     stream="game-events"
@@ -77,7 +91,20 @@ export default ({match, location, history}) => (
         <Layout>
           <LoadingIndicator visible={loaded} />
 
-          <AppBar utilityButton={<UndoButton player={currentPlayer} />} />
+          <AppBar
+            utilityButton={
+              <Switch>
+                <Route
+                  path={`${match.url}/leaderboard`}
+                  render={() => <ShuffleButton />}
+                />
+                <Route
+                  path={match.url}
+                  render={() => <UndoButton player={currentPlayer} />}
+                />
+              </Switch>
+            }
+          />
 
           <Switch>
             <Route
