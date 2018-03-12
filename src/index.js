@@ -6,8 +6,8 @@ import Firebase from 'firebase'
 import 'typeface-roboto'
 import './index.css'
 
-import App from './App'
-import Home from './Home'
+import App from './components/App'
+import Home from './components/Home'
 import registerServiceWorker from './registerServiceWorker'
 
 import JssProvider from 'react-jss/lib/JssProvider'

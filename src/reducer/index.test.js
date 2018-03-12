@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import reduce from './reducer'
+import reduce from '.'
 
 describe('adding a player', () => {
   it('adds a player if a valid player name and target is provided', () => {

@@ -16,8 +16,8 @@ import ScoreTab from './ScoreTab'
 import LeaderboardTab from './LeaderboardTab'
 import ChartTab from './ChartTab'
 
-import {FireEventStore, EventEmitter} from '../fire-event-store'
-import reducer from '../reducer'
+import {FireEventStore, EventEmitter} from '../../fire-event-store'
+import reducer from '../../reducer'
 import AppBar from '../AppBar'
 
 const Layout = styled.div`
