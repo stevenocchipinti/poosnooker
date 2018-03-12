@@ -12,13 +12,14 @@ import IconButton from 'material-ui/IconButton'
 import UndoIcon from 'material-ui-icons/Undo'
 import ShuffleIcon from 'material-ui-icons/Shuffle'
 
+import AppBar from '../AppBar'
 import ScoreTab from './ScoreTab'
 import LeaderboardTab from './LeaderboardTab'
 import ChartTab from './ChartTab'
 
 import {FireEventStore, EventEmitter} from '../../fire-event-store'
 import reducer from '../../reducer'
-import AppBar from '../AppBar'
+import {largeBreakpointWidth} from '../../config-constants'
 
 const Layout = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const LoadingIndicator = ({visible}) => (
 
 const NavBar = styled(BottomNavigation)`
   min-height: 56px;
-  @media (min-width: 700px) {
+  @media (min-width: ${largeBreakpointWidth}px) {
     display: none;
   }
 `

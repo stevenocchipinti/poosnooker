@@ -4,10 +4,11 @@ import Button from 'material-ui/Button'
 import PersonAddIcon from 'material-ui-icons/PersonAdd'
 import {SmallPlayerCard} from '../PlayerCard'
 import AddPlayerDialog from '../AddPlayerDialog'
+import {largeBreakpointWidth} from '../../config-constants'
 
 const Section = styled.section`
   display: none;
-  @media (min-width: 700px) {
+  @media (min-width: ${largeBreakpointWidth}px) {
     justify-self: center;
     align-items: center;
     align-content: center;

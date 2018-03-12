@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import ScoringButtons from './ScoringButtons'
 import WinningButtons from './WinningButtons'
+import {largeBreakpointWidth} from '../../config-constants'
 
 const Section = styled.section`
   display: grid;
@@ -10,7 +11,7 @@ const Section = styled.section`
   background-color: #333;
   padding: 20px;
 
-  @media (min-width: 700px) {
+  @media (min-width: ${largeBreakpointWidth}px) {
     grid-template-columns: 1fr;
   }
 `
