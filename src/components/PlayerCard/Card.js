@@ -14,8 +14,8 @@ const ProgressBar = ({progress}) => (
   </div>
 )
 
-export const Card = ({progress, children, className, ...props}) => (
-  <StyledPaper {...props} className={className}>
+export const Card = ({progress, children, ...props}) => (
+  <StyledPaper {...props}>
     {children}
     <ProgressBar progress={progress} />
   </StyledPaper>
@@ -23,4 +23,6 @@ export const Card = ({progress, children, className, ...props}) => (
 
 export const SmallCard = styled(Card)`
   width: 220px;
+  height: 100px;
+  margin: 10px;
 `

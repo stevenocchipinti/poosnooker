@@ -30,11 +30,15 @@ const PlaceholderButton = styled(Button)`
   margin: 10px;
 `
 
-export default ({players}) => {
+export default ({players, onPlayerSelect}) => {
   return (
     <Section>
       {players.map(player => (
-        <SmallPlayerCard key={player.name} player={player} />
+        <SmallPlayerCard
+          onClick={() => onPlayerSelect(player)}
+          key={player.name}
+          player={player}
+        />
       ))}
 
       <AddPlayerDialog>

@@ -89,30 +89,30 @@ export default ({match, location, history}) => (
       const currentPlayer = state.players[state.currentPlayerIndex]
 
       return (
-        <Layout>
-          <LoadingIndicator visible={loaded} />
+        <EventEmitter stream="game-events">
+          {emit => (
+            <Layout>
+              <LoadingIndicator visible={loaded} />
 
-          <AppBar
-            utilityButton={
+              <AppBar
+                utilityButton={
+                  <Switch>
+                    <Route
+                      path={`${match.url}/leaderboard`}
+                      render={() => <ShuffleButton />}
+                    />
+                    <Route
+                      path={match.url}
+                      render={() => <UndoButton player={currentPlayer} />}
+                    />
+                  </Switch>
+                }
+              />
+
               <Switch>
                 <Route
                   path={`${match.url}/leaderboard`}
-                  render={() => <ShuffleButton />}
-                />
-                <Route
-                  path={match.url}
-                  render={() => <UndoButton player={currentPlayer} />}
-                />
-              </Switch>
-            }
-          />
-
-          <Switch>
-            <Route
-              path={`${match.url}/leaderboard`}
-              render={() => (
-                <EventEmitter stream="game-events">
-                  {emit => (
+                  render={() => (
                     <LeaderboardTab
                       players={state.players}
                       currentPlayerIndex={state.currentPlayerIndex}
@@ -122,53 +122,59 @@ export default ({match, location, history}) => (
                       }}
                     />
                   )}
-                </EventEmitter>
-              )}
-            />
-
-            <Route
-              path={`${match.url}/score`}
-              render={() => (
-                <ScoreTab
-                  players={state.players}
-                  currentPlayerIndex={state.currentPlayerIndex}
                 />
-              )}
-            />
 
-            {hasPlayers && (
-              <Route path={`${match.url}/chart`} render={() => <ChartTab />} />
-            )}
+                <Route
+                  path={`${match.url}/score`}
+                  render={() => (
+                    <ScoreTab
+                      players={state.players}
+                      currentPlayerIndex={state.currentPlayerIndex}
+                      onPlayerSelect={player =>
+                        emit({type: 'SELECT_PLAYER', player: player.name})
+                      }
+                    />
+                  )}
+                />
 
-            <Redirect from={match.url} to={`${match.url}/leaderboard`} />
-          </Switch>
+                {hasPlayers && (
+                  <Route
+                    path={`${match.url}/chart`}
+                    render={() => <ChartTab />}
+                  />
+                )}
 
-          <NavBar value={currentRoute} showLabels>
-            <BottomNavigationAction
-              value="leaderboard"
-              label="Leaderboard"
-              icon={<PeopleIcon />}
-              component={Link}
-              to={`${match.url}/leaderboard`}
-            />
-            <BottomNavigationAction
-              value="score"
-              label="Score"
-              icon={<ScoreIcon />}
-              component={Link}
-              to={`${match.url}/score`}
-              disabled={!hasPlayers}
-            />
-            <BottomNavigationAction
-              value="chart"
-              label="Chart"
-              icon={<ChartIcon />}
-              component={Link}
-              to={`${match.url}/chart`}
-              disabled={!hasPlayers}
-            />
-          </NavBar>
-        </Layout>
+                <Redirect from={match.url} to={`${match.url}/leaderboard`} />
+              </Switch>
+
+              <NavBar value={currentRoute} showLabels>
+                <BottomNavigationAction
+                  value="leaderboard"
+                  label="Leaderboard"
+                  icon={<PeopleIcon />}
+                  component={Link}
+                  to={`${match.url}/leaderboard`}
+                />
+                <BottomNavigationAction
+                  value="score"
+                  label="Score"
+                  icon={<ScoreIcon />}
+                  component={Link}
+                  to={`${match.url}/score`}
+                  disabled={!hasPlayers}
+                />
+                <BottomNavigationAction
+                  value="chart"
+                  label="Chart"
+                  icon={<ChartIcon />}
+                  component={Link}
+                  to={`${match.url}/chart`}
+                  disabled={!hasPlayers}
+                />
+              </NavBar>
+            </Layout>
+          )}
+        </EventEmitter>
       )
     }}
   </FireEventStore>

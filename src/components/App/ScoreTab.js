@@ -18,14 +18,17 @@ const TabPanelContainer = TabPanel.extend`
   }
 `
 
-export default ({players, currentPlayerIndex}) => {
+export default ({players, currentPlayerIndex, onPlayerSelect}) => {
   const currentPlayer = players[currentPlayerIndex]
   const otherPlayers = players.filter(p => p.name !== currentPlayer.name)
 
   return (
     <TabPanelContainer>
       <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
-      <OtherPlayersPanel players={otherPlayers} />
+      <OtherPlayersPanel
+        onPlayerSelect={onPlayerSelect}
+        players={otherPlayers}
+      />
       <ActionPanel currentPlayer={currentPlayer} />
     </TabPanelContainer>
   )

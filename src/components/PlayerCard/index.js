@@ -64,8 +64,8 @@ export const PlayerCard = ({player}) => (
   </Card>
 )
 
-export const SmallPlayerCard = ({player}) => (
-  <SmallCard progress={player.score / player.target}>
+export const SmallPlayerCard = ({player, ...props}) => (
+  <SmallCard {...props} progress={player.score / player.target}>
     <SmallPlayerInfoGrid>
       <PlayerNameCell>{player.name}</PlayerNameCell>
 
