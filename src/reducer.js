@@ -8,6 +8,30 @@ const scoreValues = {
   BLACK: 7,
 }
 
+// ref: https://github.com/yixizhang/seed-shuffle/blob/master/index.js
+const shuffle = (originalArray, seed) => {
+  let array = [...originalArray]
+  let currentIndex = array.length,
+    temporaryValue,
+    randomIndex
+  seed = seed || 1
+  let random = function() {
+    var x = Math.sin(seed++) * 10000
+    return x - Math.floor(x)
+  }
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(random() * currentIndex)
+    currentIndex -= 1
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex]
+    array[currentIndex] = array[randomIndex]
+    array[randomIndex] = temporaryValue
+  }
+  return array
+}
+
 const calculateScore = history =>
   history.reduce((score, value) => {
     if (resetValues.includes(value)) return 0
@@ -85,6 +109,14 @@ const selectPlayer = (state, playerName) => {
   return index === -1 ? state : {...state, currentPlayerIndex: index}
 }
 
+const shufflePlayers = (state, seed) => {
+  return {
+    ...state,
+    currentPlayerIndex: 0,
+    players: shuffle(state.players, seed),
+  }
+}
+
 // Note: Winning is not automatic to allow for 'undo'
 const addScoreToPlayer = (state, playerName, reason) => {
   const player = extractPlayerFromState(state, playerName)
@@ -126,18 +158,21 @@ const declareWinner = (state, playerName) => {
   return endGame(newState)
 }
 
-const endGame = state => ({
-  ...state,
-  players: state.players.map(player => {
-    const newHistory = [...player.history, 'GAME_OVER']
-    const newScore = calculateScore(newHistory)
-    return {
-      ...player,
-      score: newScore,
-      history: newHistory,
-    }
-  }),
-})
+const endGame = state => {
+  const newState = {
+    ...state,
+    players: state.players.map(player => {
+      const newHistory = [...player.history, 'GAME_OVER']
+      const newScore = calculateScore(newHistory)
+      return {
+        ...player,
+        score: newScore,
+        history: newHistory,
+      }
+    }),
+  }
+  return shufflePlayers(newState)
+}
 
 const initialState = {
   players: [],
@@ -158,9 +193,8 @@ export default (state = initialState, action) => {
     case 'SELECT_PLAYER':
       return selectPlayer(state, action.player)
 
-    // TODO: This should probably be a deterministic REORDER action
-    // case 'SHUFFLE_PLAYERS':
-    //   return shufflePlayers(state)
+    case 'SHUFFLE_PLAYERS':
+      return shufflePlayers(state, action.seed)
 
     case 'SCORE':
       return addScoreToPlayer(state, action.player, action.reason)

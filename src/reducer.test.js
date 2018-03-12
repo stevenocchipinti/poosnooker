@@ -173,17 +173,20 @@ describe('winning', () => {
     const actions = [
       {type: 'ADD_PLAYER', player: 'Steve', target: 31},
       {type: 'ADD_PLAYER', player: 'Craig', target: 31},
+      {type: 'ADD_PLAYER', player: 'Some', target: 31},
+      {type: 'ADD_PLAYER', player: 'Random', target: 31},
+      {type: 'ADD_PLAYER', player: 'Player', target: 31},
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 2
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 9
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 16
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
       {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 31
-      {type: 'DECLARE_WINNER', player: 'Steve'}, // 0
     ]
-    const newState = actions.reduce(reduce, undefined)
-    const steve = newState.players[0]
-    const craig = newState.players[1]
+    const oldState = actions.reduce(reduce, undefined)
+    const newState = reduce(oldState, {type: 'DECLARE_WINNER', player: 'Steve'})
+    const steve = newState.players.find(p => p.name === 'Steve')
+    const craig = newState.players.find(p => p.name === 'Craig')
 
     it('increments the target score by 10', () => {
       expect(steve.target).toEqual(41)
@@ -205,6 +208,12 @@ describe('winning', () => {
     })
     it('resets the score', () => {
       expect(steve.score).toEqual(0)
+      expect(craig.score).toEqual(0)
+    })
+    it('shuffles the players for the next game', () => {
+      const oldOrderOfNames = oldState.players.map(p => p.name)
+      const newOrderOfNames = newState.players.map(p => p.name)
+      expect(oldOrderOfNames).not.toEqual(newOrderOfNames)
     })
   })
 
@@ -315,6 +324,37 @@ describe('selecting a player', () => {
   })
 })
 
+describe('shuffling players', () => {
+  const actions = [
+    {type: 'ADD_PLAYER', player: 'One', target: 31},
+    {type: 'ADD_PLAYER', player: 'Two', target: 31},
+    {type: 'ADD_PLAYER', player: 'Three', target: 31},
+    {type: 'ADD_PLAYER', player: 'Four', target: 31},
+    {type: 'ADD_PLAYER', player: 'Five', target: 31},
+    {type: 'NEXT_PLAYER'},
+  ]
+  const action = {type: 'SHUFFLE_PLAYERS', seed: 1}
+  const oldState = actions.reduce(reduce, undefined)
+
+  it('deterministically reorders the players array', () => {
+    const newOrderOfNames = ['Three', 'Two', 'One', 'Five', 'Four']
+
+    const firstNewState = reduce(oldState, action)
+    expect(firstNewState).not.toEqual(oldState)
+    expect(firstNewState.players.map(p => p.name)).toEqual(newOrderOfNames)
+
+    const secondNewState = reduce(oldState, action)
+    expect(secondNewState).not.toEqual(oldState)
+    expect(secondNewState.players.map(p => p.name)).toEqual(newOrderOfNames)
+  })
+
+  it('resets the currentPlayerIndex to 0', () => {
+    expect(oldState.currentPlayerIndex).toEqual(1)
+    const newState = reduce(oldState, {type: 'SHUFFLE_PLAYERS', seed: 1})
+    expect(newState.currentPlayerIndex).toEqual(0)
+  })
+})
+
 // Being lazy, should probably write single purpose unit tests :/
 describe('a typical scenario (aka lazy integration test)', () => {
   it('does a bunch of stuff', () => {
@@ -342,11 +382,11 @@ describe('a typical scenario (aka lazy integration test)', () => {
       {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 31
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 2
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 1
-      {type: 'DECLARE_WINNER', player: 'Steve'},
+      {type: 'DECLARE_WINNER', player: 'Steve'}, // currentPlayerIndex: 0
     ]
 
     expect(actions.reduce(reduce, undefined)).toEqual({
-      currentPlayerIndex: 1,
+      currentPlayerIndex: 0,
       players: [
         {
           name: 'Steve',
