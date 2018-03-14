@@ -43,7 +43,7 @@ class MenuAppBar extends React.Component {
   }
 
   render() {
-    const {classes, utilityButton} = this.props
+    const {classes, utilityButtons} = this.props
     const {auth, anchorEl} = this.state
     const open = Boolean(anchorEl)
 
@@ -62,7 +62,7 @@ class MenuAppBar extends React.Component {
           </Typography>
           {auth && (
             <div>
-              {utilityButton}
+              {utilityButtons}
               <IconButton
                 aria-owns={open ? 'menu-appbar' : null}
                 aria-haspopup="true"

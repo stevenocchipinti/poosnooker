@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Route, Redirect, Link, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
@@ -95,17 +95,11 @@ export default ({match, location, history}) => (
               <LoadingIndicator visible={loaded} />
 
               <AppBar
-                utilityButton={
-                  <Switch>
-                    <Route
-                      path={`${match.url}/leaderboard`}
-                      render={() => <ShuffleButton />}
-                    />
-                    <Route
-                      path={match.url}
-                      render={() => <UndoButton player={currentPlayer} />}
-                    />
-                  </Switch>
+                utilityButtons={
+                  <Fragment>
+                    <ShuffleButton />
+                    <UndoButton player={currentPlayer} />
+                  </Fragment>
                 }
               />
 
