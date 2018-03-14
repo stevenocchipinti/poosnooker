@@ -1,7 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 import 'jest-styled-components'
-import {PlayerCard, SmallPlayerCard, PlayerCardItem} from '.'
+import PlayerCard from '.'
 
 describe('PlayerCard', () => {
   const player = {
@@ -11,23 +11,36 @@ describe('PlayerCard', () => {
     history: ['CANNON', 'BLUE', 'GREEN'],
   }
 
-  describe('standard variant', () => {
+  describe('default variant', () => {
     it('renders correctly', () => {
       const tree = renderer.create(<PlayerCard player={player} />).toJSON()
       expect(tree).toMatchSnapshot()
     })
   })
 
-  describe('small variant', () => {
+  describe('standard variant', () => {
     it('renders correctly', () => {
-      const tree = renderer.create(<SmallPlayerCard player={player} />).toJSON()
+      const tree = renderer
+        .create(<PlayerCard variant="standard" player={player} />)
+        .toJSON()
       expect(tree).toMatchSnapshot()
     })
   })
 
-  describe('list item variant', () => {
+  describe('large variant', () => {
     it('renders correctly', () => {
-      const tree = renderer.create(<PlayerCardItem player={player} />).toJSON()
+      const tree = renderer
+        .create(<PlayerCard variant="large" player={player} />)
+        .toJSON()
+      expect(tree).toMatchSnapshot()
+    })
+  })
+
+  describe('horizontal variant', () => {
+    it('renders correctly', () => {
+      const tree = renderer
+        .create(<PlayerCard variant="horizontal" player={player} />)
+        .toJSON()
       expect(tree).toMatchSnapshot()
     })
   })

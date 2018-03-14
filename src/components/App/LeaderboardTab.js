@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import AddIcon from 'material-ui-icons/Add'
 import TabPanel from './TabPanel'
-import {PlayerCardItem} from '../PlayerCard'
+import PlayerCard from '../PlayerCard'
 import AddPlayerDialog from '../AddPlayerDialog'
 
 const AddPlayerButton = styled(Button)`
@@ -19,7 +19,8 @@ const TabPanelContainer = TabPanel.extend`
 export default ({players, currentPlayerIndex, onPlayerSelect}) => (
   <TabPanelContainer>
     {players.map((player, i) => (
-      <PlayerCardItem
+      <PlayerCard
+        variant="horizontal"
         key={i}
         player={player}
         onClick={() => onPlayerSelect(player)}

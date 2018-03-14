@@ -1,123 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PlayerCard list item variant renders correctly 1`] = `
-.c0 {
-  margin: 10px;
-  position: relative;
-}
-
-.c1 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding: 20px;
-  font-size: 1em;
-}
-
-<div
-  className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0"
->
-  <div
-    className="c1"
-  >
-    <div>
-      Player
-    </div>
-    <div>
-      <strong>
-        10
-      </strong>
-       / 
-      31
-    </div>
-  </div>
-  <div
-    style={
-      Object {
-        "bottom": 0,
-        "position": "absolute",
-        "width": "100%",
-      }
-    }
-  >
-    <div
-      aria-valuenow={32}
-      className="MuiLinearProgress-root-28 MuiLinearProgress-colorPrimary-29"
-      role="progressbar"
-    >
-      <div
-        className="MuiLinearProgress-bar-36 MuiLinearProgress-barColorPrimary-37 MuiLinearProgress-bar1Determinate-41"
-        style={
-          Object {
-            "transform": "scaleX(0.3225806451612903)",
-          }
-        }
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`PlayerCard small variant renders correctly 1`] = `
-.c1 {
-  margin: 10px;
-  position: relative;
-}
-
+exports[`PlayerCard default variant renders correctly 1`] = `
 .c0 {
   width: 220px;
   height: 100px;
   margin: 10px;
+  position: relative;
 }
 
-.c3 {
-  grid-area: name;
+.c1 {
+  display: grid;
+  font-size: 1em;
+  padding: 20px;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  overflow: hidden;
+  grid-row-gap: 10px;
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+  -ms-flex-pack: stretch;
+  justify-content: stretch;
+  grid-auto-flow: row;
+}
+
+.c2 {
   font-weight: bold;
   font-size: 1.6em;
   justify-self: center;
   overflow: hidden;
 }
 
-.c4 {
-  grid-area: score;
+.c3 {
   justify-self: center;
 }
 
-.c2 {
-  display: grid;
-  padding: 20px;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  font-size: 2em;
-  overflow: hidden;
-  grid-row-gap: 10px;
-  grid-template-areas: 'name' 'score' 'history';
-  padding: 20px;
-  font-size: 1em;
-  grid-row-gap: 10px;
-  grid-template-areas: 'name' 'score';
-}
-
 <div
-  className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0 c1"
+  className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0"
+  variant={undefined}
 >
   <div
-    className="c2"
+    className="c1"
   >
     <div
-      className="c3"
+      className="c2"
     >
       Player
     </div>
     <div
-      className="c4"
+      className="c3"
     >
       <strong>
         10
@@ -153,8 +85,95 @@ exports[`PlayerCard small variant renders correctly 1`] = `
 </div>
 `;
 
-exports[`PlayerCard standard variant renders correctly 1`] = `
+exports[`PlayerCard horizontal variant renders correctly 1`] = `
 .c0 {
+  width: auto;
+  height: auto;
+  margin: 10px;
+  position: relative;
+}
+
+.c1 {
+  display: grid;
+  font-size: 1em;
+  padding: 20px;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  overflow: hidden;
+  grid-row-gap: 10px;
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+  -ms-flex-pack: stretch;
+  justify-content: stretch;
+  grid-auto-flow: column;
+}
+
+.c2 {
+  font-weight: bold;
+  font-size: 1.6em;
+  justify-self: flex-start;
+  overflow: hidden;
+}
+
+.c3 {
+  justify-self: flex-end;
+}
+
+<div
+  className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0"
+  variant="horizontal"
+>
+  <div
+    className="c1"
+  >
+    <div
+      className="c2"
+    >
+      Player
+    </div>
+    <div
+      className="c3"
+    >
+      <strong>
+        10
+      </strong>
+       / 
+      31
+    </div>
+  </div>
+  <div
+    style={
+      Object {
+        "bottom": 0,
+        "position": "absolute",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      aria-valuenow={32}
+      className="MuiLinearProgress-root-28 MuiLinearProgress-colorPrimary-29"
+      role="progressbar"
+    >
+      <div
+        className="MuiLinearProgress-bar-36 MuiLinearProgress-barColorPrimary-37 MuiLinearProgress-bar1Determinate-41"
+        style={
+          Object {
+            "transform": "scaleX(0.3225806451612903)",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerCard large variant renders correctly 1`] = `
+.c0 {
+  width: auto;
+  height: 175px;
   margin: 10px;
   position: relative;
 }
@@ -203,19 +222,22 @@ exports[`PlayerCard standard variant renders correctly 1`] = `
 
 .c1 {
   display: grid;
+  font-size: 2em;
   padding: 20px;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  font-size: 2em;
   overflow: hidden;
   grid-row-gap: 10px;
-  grid-template-areas: 'name' 'score' 'history';
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+  -ms-flex-pack: stretch;
+  justify-content: stretch;
+  grid-auto-flow: row;
 }
 
 .c2 {
-  grid-area: name;
   font-weight: bold;
   font-size: 1.6em;
   justify-self: center;
@@ -223,17 +245,16 @@ exports[`PlayerCard standard variant renders correctly 1`] = `
 }
 
 .c3 {
-  grid-area: score;
   justify-self: center;
 }
 
 .c4 {
-  grid-area: history;
   overflow: hidden;
 }
 
 <div
   className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0"
+  variant="large"
 >
   <div
     className="c1"
@@ -268,6 +289,91 @@ exports[`PlayerCard standard variant renders correctly 1`] = `
           className="c8"
         />
       </div>
+    </div>
+  </div>
+  <div
+    style={
+      Object {
+        "bottom": 0,
+        "position": "absolute",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      aria-valuenow={32}
+      className="MuiLinearProgress-root-28 MuiLinearProgress-colorPrimary-29"
+      role="progressbar"
+    >
+      <div
+        className="MuiLinearProgress-bar-36 MuiLinearProgress-barColorPrimary-37 MuiLinearProgress-bar1Determinate-41"
+        style={
+          Object {
+            "transform": "scaleX(0.3225806451612903)",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerCard standard variant renders correctly 1`] = `
+.c0 {
+  width: 220px;
+  height: 100px;
+  margin: 10px;
+  position: relative;
+}
+
+.c1 {
+  display: grid;
+  font-size: 1em;
+  padding: 20px;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  overflow: hidden;
+  grid-row-gap: 10px;
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+  -ms-flex-pack: stretch;
+  justify-content: stretch;
+  grid-auto-flow: row;
+}
+
+.c2 {
+  font-weight: bold;
+  font-size: 1.6em;
+  justify-self: center;
+  overflow: hidden;
+}
+
+.c3 {
+  justify-self: center;
+}
+
+<div
+  className="MuiPaper-root-1 MuiPaper-elevation2-5 MuiPaper-rounded-2 c0"
+  variant="standard"
+>
+  <div
+    className="c1"
+  >
+    <div
+      className="c2"
+    >
+      Player
+    </div>
+    <div
+      className="c3"
+    >
+      <strong>
+        10
+      </strong>
+       / 
+      31
     </div>
   </div>
   <div

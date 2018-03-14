@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import PersonAddIcon from 'material-ui-icons/PersonAdd'
-import {SmallPlayerCard} from '../PlayerCard'
+import PlayerCard from '../PlayerCard'
 import AddPlayerDialog from '../AddPlayerDialog'
 import {largeBreakpointWidth} from '../../config-constants'
 
@@ -34,7 +34,7 @@ export default ({players, onPlayerSelect}) => {
   return (
     <Section>
       {players.map(player => (
-        <SmallPlayerCard
+        <PlayerCard
           onClick={() => onPlayerSelect(player)}
           key={player.name}
           player={player}
