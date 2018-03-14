@@ -1,88 +1,53 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Card, SmallCard} from './Card'
+import ProgressPaper from './ProgressPaper'
 import PlayerHistory from './PlayerHistory'
 
 const PlayerInfoGrid = styled.div`
   display: grid;
+  font-size: ${({variant}) => (variant === 'large' ? '2em' : '1em')};
   padding: 20px;
   align-items: center;
-  font-size: 2em;
   overflow: hidden;
   grid-row-gap: 10px;
-  grid-template-areas:
-    'name'
-    'score'
-    'history';
+  justify-content: stretch;
+  grid-auto-flow: ${({variant}) =>
+    variant === 'horizontal' ? 'column' : 'row'};
 `
 
 const PlayerNameCell = styled.div`
-  grid-area: name;
   font-weight: bold;
   font-size: 1.6em;
-  justify-self: center;
+  justify-self: ${({variant}) =>
+    variant === 'horizontal' ? 'flex-start' : 'center'};
   overflow: hidden;
 `
 const PlayerScoreCell = styled.div`
-  grid-area: score;
-  justify-self: center;
+  justify-self: ${({variant}) =>
+    variant === 'horizontal' ? 'flex-end' : 'center'};
 `
 const PlayerHistoryCell = styled.div`
-  grid-area: history;
   overflow: hidden;
 `
 
-const SmallPlayerInfoGrid = PlayerInfoGrid.extend`
-  padding: 20px;
-  font-size: 1em;
-  grid-row-gap: 10px;
-  grid-template-areas:
-    'name'
-    'score';
-`
+export default ({player, variant, ...props}) => (
+  <ProgressPaper
+    variant={variant}
+    progress={player.score / player.target}
+    {...props}
+  >
+    <PlayerInfoGrid variant={variant}>
+      <PlayerNameCell variant={variant}>{player.name}</PlayerNameCell>
 
-const PlayerCardItemLayout = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  font-size: 1em;
-`
-
-export const PlayerCard = ({player}) => (
-  <Card progress={player.score / player.target}>
-    <PlayerInfoGrid>
-      <PlayerNameCell>{player.name}</PlayerNameCell>
-
-      <PlayerScoreCell>
+      <PlayerScoreCell variant={variant}>
         <strong>{player.score}</strong> / {player.target}
       </PlayerScoreCell>
 
-      <PlayerHistoryCell>
-        <PlayerHistory history={player.history} />
-      </PlayerHistoryCell>
+      {variant === 'large' && (
+        <PlayerHistoryCell>
+          <PlayerHistory history={player.history} />
+        </PlayerHistoryCell>
+      )}
     </PlayerInfoGrid>
-  </Card>
-)
-
-export const SmallPlayerCard = ({player}) => (
-  <SmallCard progress={player.score / player.target}>
-    <SmallPlayerInfoGrid>
-      <PlayerNameCell>{player.name}</PlayerNameCell>
-
-      <PlayerScoreCell>
-        <strong>{player.score}</strong> / {player.target}
-      </PlayerScoreCell>
-    </SmallPlayerInfoGrid>
-  </SmallCard>
-)
-
-export const PlayerCardItem = ({player, ...props}) => (
-  <Card {...props} progress={player.score / player.target}>
-    <PlayerCardItemLayout>
-      <div>{player.name}</div>
-      <div>
-        <strong>{player.score}</strong> / {player.target}
-      </div>
-    </PlayerCardItemLayout>
-  </Card>
+  </ProgressPaper>
 )

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import {EventEmitter} from '../../fire-event-store'
-import {PlayerCard} from '../PlayerCard'
+import PlayerCard from '../PlayerCard'
 
 const Paddle = styled(Button)`
   font-size: 2em;
@@ -39,7 +39,11 @@ export default ({currentPlayer, players}) => {
       <ChangePlayerPaddle direction="previous" />
 
       <div style={{flexGrow: 1}}>
-        <PlayerCard key={currentPlayer.name} player={currentPlayer} />
+        <PlayerCard
+          variant="large"
+          key={currentPlayer.name}
+          player={currentPlayer}
+        />
       </div>
 
       <ChangePlayerPaddle direction="next" />

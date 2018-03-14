@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Route, Redirect, Link, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
@@ -12,13 +12,14 @@ import IconButton from 'material-ui/IconButton'
 import UndoIcon from 'material-ui-icons/Undo'
 import ShuffleIcon from 'material-ui-icons/Shuffle'
 
+import AppBar from '../AppBar'
 import ScoreTab from './ScoreTab'
 import LeaderboardTab from './LeaderboardTab'
 import ChartTab from './ChartTab'
 
 import {FireEventStore, EventEmitter} from '../../fire-event-store'
 import reducer from '../../reducer'
-import AppBar from '../AppBar'
+import {largeBreakpointWidth} from '../../config-constants'
 
 const Layout = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const LoadingIndicator = ({visible}) => (
 
 const NavBar = styled(BottomNavigation)`
   min-height: 56px;
-  @media (min-width: 700px) {
+  @media (min-width: ${largeBreakpointWidth}px) {
     display: none;
   }
 `
@@ -88,30 +89,24 @@ export default ({match, location, history}) => (
       const currentPlayer = state.players[state.currentPlayerIndex]
 
       return (
-        <Layout>
-          <LoadingIndicator visible={loaded} />
+        <EventEmitter stream="game-events">
+          {emit => (
+            <Layout>
+              <LoadingIndicator visible={loaded} />
 
-          <AppBar
-            utilityButton={
+              <AppBar
+                utilityButtons={
+                  <Fragment>
+                    <ShuffleButton />
+                    <UndoButton player={currentPlayer} />
+                  </Fragment>
+                }
+              />
+
               <Switch>
                 <Route
                   path={`${match.url}/leaderboard`}
-                  render={() => <ShuffleButton />}
-                />
-                <Route
-                  path={match.url}
-                  render={() => <UndoButton player={currentPlayer} />}
-                />
-              </Switch>
-            }
-          />
-
-          <Switch>
-            <Route
-              path={`${match.url}/leaderboard`}
-              render={() => (
-                <EventEmitter stream="game-events">
-                  {emit => (
+                  render={() => (
                     <LeaderboardTab
                       players={state.players}
                       currentPlayerIndex={state.currentPlayerIndex}
@@ -121,53 +116,59 @@ export default ({match, location, history}) => (
                       }}
                     />
                   )}
-                </EventEmitter>
-              )}
-            />
-
-            <Route
-              path={`${match.url}/score`}
-              render={() => (
-                <ScoreTab
-                  players={state.players}
-                  currentPlayerIndex={state.currentPlayerIndex}
                 />
-              )}
-            />
 
-            {hasPlayers && (
-              <Route path={`${match.url}/chart`} render={() => <ChartTab />} />
-            )}
+                <Route
+                  path={`${match.url}/score`}
+                  render={() => (
+                    <ScoreTab
+                      players={state.players}
+                      currentPlayerIndex={state.currentPlayerIndex}
+                      onPlayerSelect={player =>
+                        emit({type: 'SELECT_PLAYER', player: player.name})
+                      }
+                    />
+                  )}
+                />
 
-            <Redirect from={match.url} to={`${match.url}/leaderboard`} />
-          </Switch>
+                {hasPlayers && (
+                  <Route
+                    path={`${match.url}/chart`}
+                    render={() => <ChartTab />}
+                  />
+                )}
 
-          <NavBar value={currentRoute} showLabels>
-            <BottomNavigationAction
-              value="leaderboard"
-              label="Leaderboard"
-              icon={<PeopleIcon />}
-              component={Link}
-              to={`${match.url}/leaderboard`}
-            />
-            <BottomNavigationAction
-              value="score"
-              label="Score"
-              icon={<ScoreIcon />}
-              component={Link}
-              to={`${match.url}/score`}
-              disabled={!hasPlayers}
-            />
-            <BottomNavigationAction
-              value="chart"
-              label="Chart"
-              icon={<ChartIcon />}
-              component={Link}
-              to={`${match.url}/chart`}
-              disabled={!hasPlayers}
-            />
-          </NavBar>
-        </Layout>
+                <Redirect from={match.url} to={`${match.url}/leaderboard`} />
+              </Switch>
+
+              <NavBar value={currentRoute} showLabels>
+                <BottomNavigationAction
+                  value="leaderboard"
+                  label="Leaderboard"
+                  icon={<PeopleIcon />}
+                  component={Link}
+                  to={`${match.url}/leaderboard`}
+                />
+                <BottomNavigationAction
+                  value="score"
+                  label="Score"
+                  icon={<ScoreIcon />}
+                  component={Link}
+                  to={`${match.url}/score`}
+                  disabled={!hasPlayers}
+                />
+                <BottomNavigationAction
+                  value="chart"
+                  label="Chart"
+                  icon={<ChartIcon />}
+                  component={Link}
+                  to={`${match.url}/chart`}
+                  disabled={!hasPlayers}
+                />
+              </NavBar>
+            </Layout>
+          )}
+        </EventEmitter>
       )
     }}
   </FireEventStore>

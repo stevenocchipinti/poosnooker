@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'material-ui/Button'
 import PersonAddIcon from 'material-ui-icons/PersonAdd'
-import {SmallPlayerCard} from '../PlayerCard'
+import PlayerCard from '../PlayerCard'
 import AddPlayerDialog from '../AddPlayerDialog'
+import {largeBreakpointWidth} from '../../config-constants'
 
 const Section = styled.section`
   display: none;
-  @media (min-width: 700px) {
+  @media (min-width: ${largeBreakpointWidth}px) {
     justify-self: center;
     align-items: center;
     align-content: center;
@@ -29,11 +30,15 @@ const PlaceholderButton = styled(Button)`
   margin: 10px;
 `
 
-export default ({players}) => {
+export default ({players, onPlayerSelect}) => {
   return (
     <Section>
       {players.map(player => (
-        <SmallPlayerCard key={player.name} player={player} />
+        <PlayerCard
+          onClick={() => onPlayerSelect(player)}
+          key={player.name}
+          player={player}
+        />
       ))}
 
       <AddPlayerDialog>

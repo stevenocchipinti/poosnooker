@@ -9,3 +9,5 @@ export const colors = {
   POO: '#9b6c3a',
   OVER: '#ff0000',
 }
+
+export const largeBreakpointWidth = 600
