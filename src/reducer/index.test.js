@@ -210,11 +210,6 @@ describe('winning', () => {
       expect(steve.score).toEqual(0)
       expect(craig.score).toEqual(0)
     })
-    it('shuffles the players for the next game', () => {
-      const oldOrderOfNames = oldState.players.map(p => p.name)
-      const newOrderOfNames = newState.players.map(p => p.name)
-      expect(oldOrderOfNames).not.toEqual(newOrderOfNames)
-    })
   })
 
   it('does not automatically win when reaching a target score', () => {
@@ -382,11 +377,11 @@ describe('a typical scenario (aka lazy integration test)', () => {
       {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 31
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 2
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 1
-      {type: 'DECLARE_WINNER', player: 'Steve'}, // currentPlayerIndex: 0
+      {type: 'DECLARE_WINNER', player: 'Steve'},
     ]
 
     expect(actions.reduce(reduce, undefined)).toEqual({
-      currentPlayerIndex: 0,
+      currentPlayerIndex: 1,
       players: [
         {
           name: 'Steve',

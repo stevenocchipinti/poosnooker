@@ -104,7 +104,7 @@ export function declareWinner(state, playerName) {
 }
 
 export function endGame(state) {
-  const newState = {
+  return {
     ...state,
     players: state.players.map(player => {
       const newHistory = [...player.history, 'GAME_OVER']
@@ -116,5 +116,4 @@ export function endGame(state) {
       }
     }),
   }
-  return shufflePlayers(newState)
 }
