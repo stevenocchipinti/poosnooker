@@ -5,6 +5,11 @@ import {EventEmitter} from '../../fire-event-store'
 
 const Button = styled(MuiButton)`
   padding: 15px;
+  color: white;
+
+  &:disabled {
+    color: grey;
+  }
 `
 
 export default ({player, event, children, ...props}) => (
@@ -13,7 +18,6 @@ export default ({player, event, children, ...props}) => (
       <Button
         onClick={() => emit({player: player.name, ...event})}
         size="small"
-        style={{color: 'white'}}
         {...props}
       >
         {children}
