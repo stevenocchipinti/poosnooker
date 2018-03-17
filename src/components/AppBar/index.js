@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import {withStyles} from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
@@ -57,7 +58,14 @@ class MenuAppBar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography
+            variant="title"
+            color="inherit"
+            className={classes.flex}
+            style={{textDecoration: 'none'}}
+            to="/"
+            component={Link}
+          >
             Poo Snooker
           </Typography>
           {auth && (
