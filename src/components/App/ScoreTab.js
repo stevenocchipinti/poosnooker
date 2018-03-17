@@ -20,7 +20,10 @@ const TabPanelContainer = TabPanel.extend`
 
 export default ({players, currentPlayerIndex, onPlayerSelect}) => {
   const currentPlayer = players[currentPlayerIndex]
-  const otherPlayers = players.filter(p => p.name !== currentPlayer.name)
+  const otherPlayers = [
+    ...players.slice(currentPlayerIndex + 1),
+    ...players.slice(0, currentPlayerIndex),
+  ]
 
   return (
     <TabPanelContainer>
