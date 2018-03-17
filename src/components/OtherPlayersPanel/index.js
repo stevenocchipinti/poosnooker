@@ -14,7 +14,7 @@ const Section = styled.section`
     align-content: center;
     flex-direction: row;
     flex-wrap: wrap;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     justify-content: center;
     align-items: center;
