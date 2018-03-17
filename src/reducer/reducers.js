@@ -15,7 +15,7 @@ export function addPlayer(state, playerName, target) {
     currentPlayerIndex: state.currentPlayerIndex || 0,
     players: [
       ...state.players,
-      {name: playerName, target, history: [], score: 0},
+      {name: playerName, target, history: [], score: 0, wins: 0},
     ],
   }
 }
@@ -98,7 +98,7 @@ export function declareWinner(state, playerName) {
 
   const newState = newStateWithUpdatedPlayer(state, playerName, {
     target: player.target + 10,
-    history: [...player.history, 'WIN'],
+    wins: player.wins + 1,
   })
   return endGame(newState)
 }
@@ -107,7 +107,7 @@ export function endGame(state) {
   return {
     ...state,
     players: state.players.map(player => {
-      const newHistory = [...player.history, 'GAME_OVER']
+      const newHistory = []
       const newScore = calculateScore(newHistory)
       return {
         ...player,

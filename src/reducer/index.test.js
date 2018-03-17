@@ -10,8 +10,8 @@ describe('adding a player', () => {
     ]
     const newState = actions.reduce(reduce, undefined)
     expect(newState.players).toEqual([
-      {name: 'Steve', target: 31, history: [], score: 0},
-      {name: 'Craig', target: 41, history: [], score: 0},
+      {name: 'Steve', target: 31, history: [], score: 0, wins: 0},
+      {name: 'Craig', target: 41, history: [], score: 0, wins: 0},
     ])
   })
 
@@ -182,29 +182,21 @@ describe('winning', () => {
       {type: 'SCORE', player: 'Steve', reason: 'BLACK'}, // 23
       {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 29
       {type: 'SCORE', player: 'Steve', reason: 'CANNON'}, // 31
+      {type: 'DECLARE_WINNER', player: 'Steve'},
     ]
-    const oldState = actions.reduce(reduce, undefined)
-    const newState = reduce(oldState, {type: 'DECLARE_WINNER', player: 'Steve'})
+    const newState = actions.reduce(reduce, undefined)
     const steve = newState.players.find(p => p.name === 'Steve')
     const craig = newState.players.find(p => p.name === 'Craig')
 
     it('increments the target score by 10', () => {
       expect(steve.target).toEqual(41)
     })
-    it('adds a WIN to the history', () => {
-      expect(steve.history).toEqual([
-        'CANNON',
-        'BLACK',
-        'BLACK',
-        'BLACK',
-        'PINK',
-        'CANNON',
-        'WIN',
-        'GAME_OVER',
-      ])
+    it('increments the wins count by 1', () => {
+      expect(steve.wins).toEqual(1)
     })
-    it('ends the game (adds GAME_OVER to everyone)', () => {
-      expect(craig.history).toEqual(['GAME_OVER'])
+    it('clears the history array for all players', () => {
+      expect(steve.history).toEqual([])
+      expect(craig.history).toEqual([])
     })
     it('resets the score', () => {
       expect(steve.score).toEqual(0)
@@ -377,7 +369,6 @@ describe('a typical scenario (aka lazy integration test)', () => {
       {type: 'SCORE', player: 'Steve', reason: 'PINK'}, // 31
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 2
       {type: 'PREVIOUS_PLAYER'}, // currentPlayerIndex: 1
-      {type: 'DECLARE_WINNER', player: 'Steve'},
     ]
 
     expect(actions.reduce(reduce, undefined)).toEqual({
@@ -385,7 +376,7 @@ describe('a typical scenario (aka lazy integration test)', () => {
       players: [
         {
           name: 'Steve',
-          target: 41,
+          target: 31,
           history: [
             'CANNON', // 2
             'YELLOW', // 4
@@ -398,22 +389,23 @@ describe('a typical scenario (aka lazy integration test)', () => {
             'PINK', // 18
             'BLACK', // 25
             'PINK', // 25
-            'WIN',
-            'GAME_OVER',
           ],
-          score: 0,
+          score: 31,
+          wins: 0,
         },
         {
           name: 'Craig',
           target: 31,
-          history: ['CANNON', 'GAME_OVER'],
-          score: 0,
+          history: ['CANNON'],
+          score: 2,
+          wins: 0,
         },
         {
           name: 'Sandy',
           target: 31,
-          history: ['CANNON', 'GAME_OVER'],
-          score: 0,
+          history: ['CANNON'],
+          score: 2,
+          wins: 0,
         },
       ],
     })
