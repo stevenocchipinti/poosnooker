@@ -6,8 +6,10 @@ import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
-import AccountCircle from 'material-ui-icons/AccountCircle'
+// import AccountCircle from 'material-ui-icons/AccountCircle'
 import Menu, {MenuItem} from 'material-ui/Menu'
+
+import {UndoButton, ShuffleButton, ShareButton} from './menuButtons'
 
 // Most of this code was copied straight from:
 // https://material-ui-next.com/demos/app-bar/
@@ -44,7 +46,7 @@ class MenuAppBar extends React.Component {
   }
 
   render() {
-    const {classes, utilityButtons} = this.props
+    const {classes, currentPlayer} = this.props
     const {auth, anchorEl} = this.state
     const open = Boolean(anchorEl)
 
@@ -70,15 +72,19 @@ class MenuAppBar extends React.Component {
           </Typography>
           {auth && (
             <div>
-              {utilityButtons}
-              <IconButton
+              <ShuffleButton />
+              <UndoButton player={currentPlayer} />
+              <ShareButton />
+
+              {/*<IconButton
                 aria-owns={open ? 'menu-appbar' : null}
                 aria-haspopup="true"
                 onClick={this.handleMenu}
                 color="inherit"
               >
                 <AccountCircle />
-              </IconButton>
+              </IconButton>*/}
+
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}

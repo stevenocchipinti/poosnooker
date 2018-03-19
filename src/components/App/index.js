@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import {Route, Redirect, Link, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import {LinearProgress} from 'material-ui/Progress'
@@ -7,10 +7,6 @@ import {BottomNavigationAction} from 'material-ui/BottomNavigation'
 import PeopleIcon from 'material-ui-icons/People'
 import ScoreIcon from 'material-ui-icons/Create'
 import ChartIcon from 'material-ui-icons/ShowChart'
-
-import IconButton from 'material-ui/IconButton'
-import UndoIcon from 'material-ui-icons/Undo'
-import ShuffleIcon from 'material-ui-icons/Shuffle'
 
 import AppBar from '../AppBar'
 import ScoreTab from './ScoreTab'
@@ -47,33 +43,6 @@ const NavBar = styled(BottomNavigation)`
   }
 `
 
-const UndoButton = ({player}) => (
-  <EventEmitter stream="game-events">
-    {emit => (
-      <IconButton
-        onClick={() => emit({type: 'UNDO', player: player.name})}
-        color="inherit"
-        disabled={!player || player.history.length === 0}
-      >
-        <UndoIcon />
-      </IconButton>
-    )}
-  </EventEmitter>
-)
-
-const ShuffleButton = () => (
-  <EventEmitter stream="game-events">
-    {emit => (
-      <IconButton
-        onClick={() => emit({type: 'SHUFFLE_PLAYERS', seed: Math.random()})}
-        color="inherit"
-      >
-        <ShuffleIcon />
-      </IconButton>
-    )}
-  </EventEmitter>
-)
-
 export default ({match, location, history}) => (
   <FireEventStore
     stream="game-events"
@@ -94,14 +63,7 @@ export default ({match, location, history}) => (
             <Layout>
               <LoadingIndicator visible={loaded} />
 
-              <AppBar
-                utilityButtons={
-                  <Fragment>
-                    <ShuffleButton />
-                    <UndoButton player={currentPlayer} />
-                  </Fragment>
-                }
-              />
+              <AppBar currentPlayer={currentPlayer} />
 
               <Switch>
                 <Route
