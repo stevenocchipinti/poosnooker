@@ -25,6 +25,7 @@ const ChangePlayerPaddle = ({direction}) => {
 }
 
 const Section = styled.section`
+  grid-area: current-player;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,19 +1,21 @@
-const resetValues = ['FOUL', 'POO', 'OVER', 'GAME_OVER']
-const scoreValues = {
-  CANNON: 2,
-  YELLOW: 2,
-  GREEN: 3,
-  BLUE: 5,
-  PINK: 6,
-  BLACK: 7,
-}
+import {resetValues, scoreValues} from '../config-constants'
 
-export function calculateScore(history) {
+function calculateScore(history) {
   return history.reduce((score, value) => {
     if (resetValues.includes(value)) return 0
     if (scoreValues[value]) return score + scoreValues[value]
     return score
   }, 0)
+}
+
+function calculateCumulativeScore(history) {
+  return history.reduce(
+    (result, value, index) => [
+      ...result,
+      calculateScore(history.slice(0, index + 1)),
+    ],
+    [0],
+  )
 }
 
 export function newStateWithUpdatedPlayer(state, playerName, changes) {
@@ -26,6 +28,7 @@ export function newStateWithUpdatedPlayer(state, playerName, changes) {
       {
         ...player,
         score: calculateScore(player.history),
+        cumulativeScore: calculateCumulativeScore(player.history),
       },
       ...state.players.slice(playerIndex + 1),
     ],

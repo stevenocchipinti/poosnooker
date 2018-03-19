@@ -10,8 +10,22 @@ describe('adding a player', () => {
     ]
     const newState = actions.reduce(reduce, undefined)
     expect(newState.players).toEqual([
-      {name: 'Steve', target: 31, history: [], score: 0, wins: 0},
-      {name: 'Craig', target: 41, history: [], score: 0, wins: 0},
+      {
+        name: 'Steve',
+        target: 31,
+        history: [],
+        cumulativeScore: [0],
+        score: 0,
+        wins: 0,
+      },
+      {
+        name: 'Craig',
+        target: 41,
+        history: [],
+        cumulativeScore: [0],
+        score: 0,
+        wins: 0,
+      },
     ])
   })
 
@@ -63,6 +77,19 @@ describe('adding score to a player', () => {
       expect(newState.players[0].history).toHaveLength(0)
     })
 
+    it('does not add anything to the cumulativeScore', () => {
+      const newState = actions.reduce(reduce, undefined)
+      expect(newState.players[0].cumulativeScore).toEqual([0])
+    })
+
+    it('still does add any score resets to the cumulativeScore', () => {
+      const newState = [
+        ...actions,
+        {type: 'RESET_SCORE', player: 'Steve', reason: 'POO'},
+      ].reduce(reduce, undefined)
+      expect(newState.players[0].cumulativeScore).toEqual([0, 0])
+    })
+
     it('still does add any score resets to the history', () => {
       const newState = [
         ...actions,
@@ -108,6 +135,22 @@ describe('adding score to a player', () => {
       ])
     })
 
+    it('does add an item to the cumulativeScore', () => {
+      expect(player.cumulativeScore).toEqual([
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        4,
+        7,
+        12,
+        18,
+        25,
+      ])
+    })
+
     describe('when the score reaches (target - 1) points', () => {
       const actions = [
         {type: 'ADD_PLAYER', player: 'Steve', target: 31},
@@ -122,6 +165,10 @@ describe('adding score to a player', () => {
 
       it('resets the score', () => {
         expect(player.score).toEqual(0)
+      })
+
+      it('resets the cumulativeScore', () => {
+        expect(player.cumulativeScore).toEqual([0, 2, 9, 16, 23, 30, 0])
       })
 
       it('adds "OVER" to the history', () => {
@@ -151,6 +198,10 @@ describe('adding score to a player', () => {
 
       it('resets the score', () => {
         expect(player.score).toEqual(0)
+      })
+
+      it('resets the cumulativeScore', () => {
+        expect(player.cumulativeScore).toEqual([0, 2, 9, 16, 23, 29, 32, 0])
       })
 
       it('adds "OVER" to the history', () => {
@@ -198,6 +249,10 @@ describe('winning', () => {
       expect(steve.history).toEqual([])
       expect(craig.history).toEqual([])
     })
+    it('clears the cumulativeScore score array for all players', () => {
+      expect(steve.cumulativeScore).toEqual([0])
+      expect(craig.cumulativeScore).toEqual([0])
+    })
     it('resets the score', () => {
       expect(steve.score).toEqual(0)
       expect(craig.score).toEqual(0)
@@ -218,8 +273,10 @@ describe('winning', () => {
     const player = newState.players[0]
 
     expect(player.score).toEqual(31)
+    expect(player.cumulativeScore.slice(-1)).toEqual([31])
     expect(player.target).toEqual(31)
     expect(player.history).toHaveLength(6)
+    expect(player.cumulativeScore).toHaveLength(7)
     expect(player.history).not.toContain('WIN')
     expect(player.history).not.toContain('GAME_OVER')
   })
@@ -234,8 +291,10 @@ describe('winning', () => {
     const player = newState.players[0]
 
     expect(player.score).toEqual(2)
+    expect(player.cumulativeScore.slice(-1)).toEqual([2])
     expect(player.target).toEqual(31)
     expect(player.history).toHaveLength(1)
+    expect(player.cumulativeScore).toHaveLength(2)
     expect(player.history).not.toContain('WIN')
     expect(player.history).not.toContain('GAME_OVER')
   })
@@ -253,8 +312,12 @@ describe('undo', () => {
     const newState = actions.reduce(reduce, undefined)
     const player = newState.players[0]
 
-    it('removes the last "SCORE" event', () => {
+    it('removes the last "SCORE" event from the history', () => {
       expect(player.history).toEqual(['CANNON', 'BLUE'])
+    })
+
+    it('removes the last "SCORE" from the cumulativeScore', () => {
+      expect(player.cumulativeScore).toEqual([0, 2, 7])
     })
 
     it('excludes the last "SCORE" event from the score calculation', () => {
@@ -273,8 +336,12 @@ describe('undo', () => {
     const newState = actions.reduce(reduce, undefined)
     const player = newState.players[0]
 
-    it('removes the last "RESET" event', () => {
+    it('removes the last "RESET" event from the history', () => {
       expect(player.history).toEqual(['CANNON', 'BLUE'])
+    })
+
+    it('removes the last "RESET" from the cumulativeScore', () => {
+      expect(player.cumulativeScore).toEqual([0, 2, 7])
     })
 
     it('excludes the last "RESET" event from the score calculation', () => {
@@ -388,8 +455,9 @@ describe('a typical scenario (aka lazy integration test)', () => {
             'BLUE', // 12
             'PINK', // 18
             'BLACK', // 25
-            'PINK', // 25
+            'PINK', // 31
           ],
+          cumulativeScore: [0, 2, 4, 0, 0, 2, 4, 7, 12, 18, 25, 31],
           score: 31,
           wins: 0,
         },
@@ -397,6 +465,7 @@ describe('a typical scenario (aka lazy integration test)', () => {
           name: 'Craig',
           target: 31,
           history: ['CANNON'],
+          cumulativeScore: [0, 2],
           score: 2,
           wins: 0,
         },
@@ -404,6 +473,7 @@ describe('a typical scenario (aka lazy integration test)', () => {
           name: 'Sandy',
           target: 31,
           history: ['CANNON'],
+          cumulativeScore: [0, 2],
           score: 2,
           wins: 0,
         },
