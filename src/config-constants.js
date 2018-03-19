@@ -11,3 +11,4 @@ export const colors = {
 }
 
 export const largeBreakpointWidth = 600
+export const largeBreakpointHeight = 600

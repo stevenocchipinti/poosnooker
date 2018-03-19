@@ -3,6 +3,7 @@ import TabPanel from './TabPanel'
 import CurrentPlayerPanel from '../CurrentPlayerPanel'
 import OtherPlayersPanel from '../OtherPlayersPanel'
 import ActionPanel from '../ActionPanel'
+import ChartPanel from '../ChartPanel'
 import {largeBreakpointWidth} from '../../config-constants'
 
 const TabPanelContainer = TabPanel.extend`
@@ -14,10 +15,10 @@ const TabPanelContainer = TabPanel.extend`
     grid-template-columns: 5fr 1fr;
     grid-template-areas:
       'current-player action-panel'
+      'chart-panel    action-panel'
       'other-players  action-panel';
   }
 `
-
 export default ({players, currentPlayerIndex, onPlayerSelect}) => {
   const currentPlayer = players[currentPlayerIndex]
   const otherPlayers = [
@@ -28,6 +29,7 @@ export default ({players, currentPlayerIndex, onPlayerSelect}) => {
   return (
     <TabPanelContainer>
       <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
+      <ChartPanel history={currentPlayer && currentPlayer.history} />
       <OtherPlayersPanel
         onPlayerSelect={onPlayerSelect}
         players={otherPlayers}
