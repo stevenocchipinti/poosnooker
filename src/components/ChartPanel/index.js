@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Trend from 'react-trend'
-import {calculateScore} from '../../reducer/helpers'
 import {largeBreakpointHeight} from '../../config-constants'
 
 const Section = styled.section`
@@ -23,27 +22,17 @@ const Chart = styled(Trend)`
   height: 100%;
 `
 
-export default ({history}) => {
-  const data =
-    history &&
-    history.reduce(
-      (result, value, index) => [
-        ...result,
-        calculateScore(history.slice(0, index + 1)),
-      ],
-      [0],
-    )
-
+export default ({cumulativeScore}) => {
   return (
     <Section>
-      {data &&
-        data.length > 1 && (
+      {cumulativeScore &&
+        cumulativeScore.length > 1 && (
           <Chart
             smooth
             autoDraw
             autoDrawDuration={1000}
             autoDrawEasing="ease-out"
-            data={data}
+            data={cumulativeScore}
             gradient={['#2196f3', '#F0F', '#FF0']}
             radius={10}
             strokeWidth={1}

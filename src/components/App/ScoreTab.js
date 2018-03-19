@@ -29,7 +29,9 @@ export default ({players, currentPlayerIndex, onPlayerSelect}) => {
   return (
     <TabPanelContainer>
       <CurrentPlayerPanel currentPlayer={currentPlayer} players={players} />
-      <ChartPanel history={currentPlayer && currentPlayer.history} />
+      <ChartPanel
+        cumulativeScore={currentPlayer && currentPlayer.cumulativeScore}
+      />
       <OtherPlayersPanel
         onPlayerSelect={onPlayerSelect}
         players={otherPlayers}

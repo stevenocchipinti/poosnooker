@@ -1,6 +1,5 @@
 import {
   shuffle,
-  calculateScore,
   newStateWithUpdatedPlayer,
   extractPlayerFromState,
 } from './helpers'
@@ -15,7 +14,14 @@ export function addPlayer(state, playerName, target) {
     currentPlayerIndex: state.currentPlayerIndex || 0,
     players: [
       ...state.players,
-      {name: playerName, target, history: [], score: 0, wins: 0},
+      {
+        name: playerName,
+        target,
+        history: [],
+        cumulativeScore: [0],
+        score: 0,
+        wins: 0,
+      },
     ],
   }
 }
@@ -107,12 +113,11 @@ export function endGame(state) {
   return {
     ...state,
     players: state.players.map(player => {
-      const newHistory = []
-      const newScore = calculateScore(newHistory)
       return {
         ...player,
-        score: newScore,
-        history: newHistory,
+        score: 0,
+        history: [],
+        cumulativeScore: [0],
       }
     }),
   }
