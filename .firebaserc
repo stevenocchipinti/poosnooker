@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "poo-snooker"
-  }
+  },
+  "targets": {
+    "poo-snooker": {
+      "hosting": {
+        "poosnooker": [
+          "poosnooker"
+        ],
+        "old-poosnooker": [
+          "poo-snooker"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
